@@ -1,9 +1,10 @@
 ﻿using AppFundacion.Models;
 using Microsoft.EntityFrameworkCore;
+using UraniumUI.Pages;
 
 namespace AppFundacion
 {
-    public partial class MainPage : ContentPage
+    public partial class MainPage : UraniumContentPage
     {
         int count = 0;
         private readonly AppDbContext db = new AppDbContext();
@@ -39,6 +40,22 @@ namespace AppFundacion
             }
         }
 
+        private void OnDarkModeButtonClicked(object sender, EventArgs e)
+        {
+            // Cambiar al tema oscuro
+            ((App)Application.Current).SetTheme(AppTheme.Dark);
+        }
+
+        private void OnLightModeButtonClicked(object sender, EventArgs e)
+        {
+            // Cambiar al tema oscuro
+            ((App)Application.Current).SetTheme(AppTheme.Light);
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }

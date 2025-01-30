@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<uranium:UraniumContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AppFundacion.MainPage">
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+             x:Class="AppFundacion.MainPage"
+             xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material">
 
     <ScrollView>
         <VerticalStackLayout
@@ -30,7 +32,42 @@
                 SemanticProperties.Hint="Counts the number of times you click"
                 Clicked="OnCounterClicked"
                 HorizontalOptions="Fill" />
+            <Button Text="Cambiar a Modo Oscuro"
+                    Clicked="OnDarkModeButtonClicked" />
+            <Button Text="Cambiar a Modo Claro"
+                    Clicked="OnLightModeButtonClicked" />
+
+            <FlexLayout JustifyContent="SpaceBetween" Wrap="Wrap">
+                <Button StyleClass="ElevatedButton"  Text="Elevated Button" />
+                <Button StyleClass="ElevatedButton" IsEnabled="False" Text="Elevated Button (Disabled)" />
+            </FlexLayout>
+            <BoxView Margin="20,0"/>
+            <FlexLayout JustifyContent="SpaceBetween" Wrap="Wrap">
+                <Button StyleClass="FilledButton" Text="Filled Button" />
+                <Button StyleClass="FilledButton" IsEnabled="False" Text="Filled Button (Disabled)" />
+            </FlexLayout>
+            <BoxView Margin="20,0"/>
+            <FlexLayout JustifyContent="SpaceBetween" Wrap="Wrap">
+                <Button StyleClass="FilledTonalButton" Text="Filled Tonal Button" />
+                <Button StyleClass="FilledTonalButton" IsEnabled="False" Text="Filled Tonal Button (Disabled)" />
+            </FlexLayout>
+            <BoxView Margin="20,0"/>
+            <FlexLayout JustifyContent="SpaceBetween" Wrap="Wrap">
+                <Button StyleClass="OutlinedButton" Text="Outlined Button" />
+                <Button StyleClass="OutlinedButton" IsEnabled="False" Text="Outlined Button (Disabled)" />
+            </FlexLayout>
+            <BoxView Margin="20,0"/>
+            <FlexLayout JustifyContent="SpaceBetween" Wrap="Wrap">
+                <Button StyleClass="TextButton" Text="Text Button" />
+                <Button StyleClass="TextButton" IsEnabled="False" Text="Text Button (Disabled)" />
+            </FlexLayout>
+
+            <material:ButtonView>
+                <Label Text="Hello UraniumUI 👋" />
+            </material:ButtonView>
+
         </VerticalStackLayout>
+        
     </ScrollView>
 
-</ContentPage>
+</uranium:UraniumContentPage>
