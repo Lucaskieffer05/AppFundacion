@@ -7,7 +7,6 @@
             InitializeComponent();
 
             MainPage = new AppShell();
-            UserAppTheme = AppTheme.Dark;
         }
 
         public void SetTheme(AppTheme theme)

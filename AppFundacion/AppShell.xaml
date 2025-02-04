@@ -3,13 +3,42 @@
     x:Class="AppFundacion.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:AppFundacion"
-    Shell.FlyoutBehavior="Disabled"
+    xmlns:local="clr-namespace:AppFundacion.Views"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    Shell.FlyoutBehavior="Locked"
+    Shell.TabBarIsVisible="False"
     Title="AppFundacion">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <Shell.FlyoutHeader>
+        <Image Source="fundacion.png" />
+    </Shell.FlyoutHeader>
+
+
+    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
+        <ShellContent
+            Title="Home"
+            ContentTemplate="{DataTemplate local:MainPage}"
+            Route="MainPage"/>
+
+        <ShellContent
+            Title="Donante"
+            ContentTemplate="{DataTemplate local:DonantesView}"
+            Route="DonantesView" />
+
+    </FlyoutItem>
+
+    <Shell.FlyoutFooter>
+        <uranium:GridLayout Margin="20"
+            ColumnCount="2" 
+            ColumnSpacing="16">
+            <Label Text="Modo claro/ocuro" Grid.Column="0" HorizontalTextAlignment="Center" HorizontalOptions="End" VerticalOptions="Center"/>
+            <Switch Grid.Column="1" IsToggled="False" 
+                    HorizontalOptions="Center" VerticalOptions="Center"
+                    Toggled="OnThemeSwitchToggled"/>
+        </uranium:GridLayout>
+
+    </Shell.FlyoutFooter>
+
+
 
 </Shell>

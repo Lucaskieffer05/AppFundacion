@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<uranium:UraniumContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppFundacion.Views.DonantesView"
+             Title="DonantesView"
+             xmlns:viewModels="clr-namespace:AppFundacion.ViewModels"
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+             xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+             xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
+             xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome">
+
+    <uranium:UraniumContentPage.BindingContext>
+        <viewModels:DonantesViewModel/>
+    </uranium:UraniumContentPage.BindingContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="140"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+
+        <VerticalStackLayout Grid.Row="0" >
+
+            <HorizontalStackLayout Padding="15" Margin="20,0,40,0">
+                <material:RadioButton Text="Option 1" />
+                <material:RadioButton Text="Option 2" />
+                <material:RadioButton Text="Option 3 (Disabled)" IsDisabled="True" />
+                <material:RadioButton Text="Option 4 (Disabled)" IsDisabled="True" IsChecked="True" />
+            </HorizontalStackLayout>
+            
+            <HorizontalStackLayout Padding="15">
+                <material:TextField Title="Buscar" WidthRequest="300" Margin="20,0,40,0" AllowClear="True" 
+                                    Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.User}}"/>
+                <Button StyleClass="FilledButton" Text="Agregar Donante" />
+                <Button StyleClass="FilledTonalButton" Text="Modificar" />
+                <Button StyleClass="OutlinedButton" Text="Eliminar" TextColor="{StaticResource Error}" />
+            </HorizontalStackLayout>
+            
+        </VerticalStackLayout>
+
+        <ScrollView Grid.Row="1">
+            <dg:DataGrid Grid.Row="1" ItemsSource="{Binding ListaDonantes}" Style="{StaticResource TablaComun}"             
+             IsRefreshing="{Binding IsBusy}">
+                <!-- Acá dentro se definen las columnas de la tabla -->
+                <!-- Ver bien el tema de configurar bien las columnas con DataTemplate -->
+                <dg:DataGrid.Columns>
+                    <dg:DataGridColumn Title="Codigo"  PropertyName="Id"/>
+                    <dg:DataGridColumn Title="DNI" PropertyName="Dni"/>
+                    <dg:DataGridColumn Title="Nombre y Aplleido" PropertyName="NombreApellido"/>
+                    <dg:DataGridColumn Title="Ciudad" PropertyName="Ciudad"/>
+                    <dg:DataGridColumn Title="Provincia" PropertyName="Provincia"/>
+                    <dg:DataGridColumn Title="Monto" PropertyName="Monto"/>
+                    <dg:DataGridColumn Title="IdCobrador" PropertyName="IdCobrador"/>
+                </dg:DataGrid.Columns>
+            </dg:DataGrid>
+        </ScrollView>
+
+    </Grid>
+    
+    
+</uranium:UraniumContentPage>

@@ -1,5 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using AppFundacion.Models;
+using AppFundacion.Views;
+using AppFundacion.Controllers;
+using AppFundacion.ViewModels;
+using Microsoft.Extensions.Logging;
 using UraniumUI;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppFundacion
 {
@@ -16,12 +21,17 @@ namespace AppFundacion
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                    
+                    fonts.AddFontAwesomeIconFonts();
                 });
-                
+
+            builder.Services.AddScoped<DonanteController>();
+
+            builder.Services.AddSingleton<DonantesView>();
+            builder.Services.AddSingleton<DonantesViewModel>();
+
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();
