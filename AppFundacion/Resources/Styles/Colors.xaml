@@ -109,6 +109,7 @@
     <Color x:Key="ScrimDark">#000000</Color>
 
     <Color x:Key="GreenSub">#5acc71</Color>
+    <Color x:Key="GreenAgua">#cdffb8</Color>
 
 
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>

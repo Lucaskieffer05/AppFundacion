@@ -11,15 +11,15 @@ public partial class DonantesView : UraniumContentPage
 	{
 		InitializeComponent();
         _cts = new CancellationTokenSource();
-
+        CargarDonantesAlCrear();
     }
 
-    protected override async void OnAppearing()
+    private async void CargarDonantesAlCrear()
     {
-        base.OnAppearing();
         if (ViewModel is not null)
             await ViewModel.CargarDonantesAsync();
     }
+
     private async void OnTextChanged(object sender, TextChangedEventArgs e)
     {
         if (BindingContext is DonantesViewModel viewModel)
@@ -30,7 +30,10 @@ public partial class DonantesView : UraniumContentPage
             try
             {
                 await Task.Delay(500, _cts.Token); // Esperamos 1 segundo
-                viewModel.FiltrarDonantes(); // Llamamos al método FiltrarDonantes
+                if (string.IsNullOrEmpty(e.NewTextValue) || !e.NewTextValue.All(char.IsWhiteSpace))
+                {
+                    viewModel.FiltrarDonantes();
+                } // Llamamos al método FiltrarDonantes
             }
             catch (TaskCanceledException)
             {

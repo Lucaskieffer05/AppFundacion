@@ -15,20 +15,24 @@
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15">
 
-            <material:TextField Title="DNI" Text="{Binding Donante.Dni}" />
-            <material:TextField Title="Nombre y Apellido" Text="{Binding Donante.NombreApellido}" />
-            <material:TextField Title="Ciudad" Text="{Binding Donante.Ciudad}" />
-            <material:TextField Title="Provincia" Text="{Binding Donante.Provincia}" />
-            <material:TextField Title="País" Text="{Binding Donante.Pais}" />
+            <material:TextField Title="DNI" Text="{Binding DonanteModificar.Dni}" />
+            <material:TextField Title="Nombre y Apellido" Text="{Binding DonanteModificar.NombreApellido}" />
+            <material:TextField Title="Ciudad" Text="{Binding DonanteModificar.Ciudad}" />
+            <material:TextField Title="Provincia" Text="{Binding DonanteModificar.Provincia}" />
+            <material:TextField Title="País" Text="{Binding DonanteModificar.Pais}" />
 
-            <material:DatePickerField Title="Fecha de Ingreso" Date="{Binding Donante.FechaIngreso}" 
+            <material:DatePickerField Title="Fecha de Ingreso" Date="{Binding DonanteModificar.FechaIngreso}" 
                                       Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Calendar}}"/>
 
-            <material:TextField Title="Monto" Text="{Binding Donante.Monto}" Keyboard="Numeric" />
+            <material:TextField Title="Monto" Text="{Binding DonanteModificar.Monto}" Keyboard="Numeric" />
+
+            <material:DropdownField Title="Cobrador" ItemsSource="{Binding ListaCobradores}" 
+                                    SelectedItem="{Binding DonanteModificar.IdCobradorNavigation, Mode=TwoWay}">
+            </material:DropdownField>
 
             <HorizontalStackLayout Spacing="10">
-                <Button StyleClass="OutlinedButton" Text="Guardar" TextColor="{StaticResource GreenSub}" />
-                <Button StyleClass="OutlinedButton" Text="Cancelar" TextColor="{StaticResource Error}" />
+                <Button StyleClass="OutlinedButton" Text="Guardar" TextColor="{StaticResource GreenSub}" Command="{Binding ModficiarDonadorCommand}" />
+                <Button StyleClass="OutlinedButton" Text="Cancelar" TextColor="{StaticResource Error}" Command="{Binding VolverAtrasCommand}"/>
             </HorizontalStackLayout>
         </VerticalStackLayout>
     </ScrollView>

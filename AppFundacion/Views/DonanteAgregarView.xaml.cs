@@ -1,22 +1,20 @@
-
-namespace AppFundacion.Views;
 using AppFundacion.ViewModels;
 using UraniumUI.Pages;
 
-public partial class DonanteModificarView : UraniumContentPage
+namespace AppFundacion.Views;
+
+public partial class DonanteAgregarView : UraniumContentPage
 {
 
-    private DonantesModificarViewModel? ViewModel => BindingContext as DonantesModificarViewModel;
-    public DonanteModificarView()
+    private DonanteAgregarViewModel? ViewModel => BindingContext as DonanteAgregarViewModel;
+    public DonanteAgregarView()
 	{
 		InitializeComponent();
 	}
-
     protected override async void OnAppearing()
     {
         base.OnAppearing();
         if (ViewModel is not null)
             await ViewModel.CargarCobradoresAsync();
     }
-
 }

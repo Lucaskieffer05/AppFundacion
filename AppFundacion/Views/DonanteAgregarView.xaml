@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<uranium:UraniumContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppFundacion.Views.DonanteAgregarView"
+             xmlns:viewModels="clr-namespace:AppFundacion.ViewModels"
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+             xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+             xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+             Title="Modificar Donante">
+
+    <uranium:UraniumContentPage.BindingContext>
+        <viewModels:DonanteAgregarViewModel/>
+    </uranium:UraniumContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <material:TextField Title="DNI" Text="{Binding DonanteAgregar.Dni, Mode=TwoWay}" />
+            <material:TextField Title="Nombre y Apellido" Text="{Binding DonanteAgregar.NombreApellido, Mode=TwoWay}" />
+            <material:TextField Title="Ciudad" Text="{Binding DonanteAgregar.Ciudad, Mode=TwoWay}" />
+            <material:TextField Title="Provincia" Text="{Binding DonanteAgregar.Provincia, Mode=TwoWay}" />
+            <material:TextField Title="País" Text="{Binding DonanteAgregar.Pais, Mode=TwoWay}" />
+
+            <material:DatePickerField Title="Fecha de Ingreso" Date="{Binding DonanteAgregar.FechaIngreso, Mode=TwoWay}" 
+                                      Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Calendar}}"/>
+
+            <material:TextField Title="Monto" Text="{Binding DonanteAgregar.Monto, Mode=TwoWay}" Keyboard="Numeric" />
+
+            <material:DropdownField Title="Cobrador" ItemsSource="{Binding ListaCobradores, Mode=TwoWay}" 
+                                    SelectedItem="{Binding DonanteAgregar.IdCobradorNavigation, Mode=TwoWay}"/>
+
+
+            <HorizontalStackLayout Spacing="10">
+                <Button StyleClass="ElevatedButton" Text="Agregar" Command="{Binding AgregarDonanteCommand}"/>
+                <Button StyleClass="OutlinedButton" Text="Cancelar" TextColor="{StaticResource Error}" Command="{Binding VolverAtrasCommand}"/>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</uranium:UraniumContentPage>

@@ -1,10 +1,16 @@
-﻿namespace AppFundacion
+﻿using AppFundacion.Views;
+
+namespace AppFundacion
 {
     public partial class AppShell : Shell
     {
         public AppShell()
         {
             InitializeComponent();
+
+            Routing.RegisterRoute(nameof(DonanteModificarView), typeof(DonanteModificarView));
+            Routing.RegisterRoute(nameof(DonanteAgregarView), typeof(DonanteAgregarView));
+
         }
 
         private void OnThemeSwitchToggled(object sender, ToggledEventArgs e)

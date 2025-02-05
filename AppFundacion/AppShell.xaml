@@ -23,14 +23,9 @@
             />
 
         <ShellContent
-            Title="Donante"
+            Title="Donantes"
             ContentTemplate="{DataTemplate local:DonantesView}"
             Route="DonantesView" />
-
-        <ShellContent
-            Title="Donante Modificar"
-            ContentTemplate="{DataTemplate local:DonanteModificarView}"
-            Route="DonanteModificarView" />
 
     </FlyoutItem>
 

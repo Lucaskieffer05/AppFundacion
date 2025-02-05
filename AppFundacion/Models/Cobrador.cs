@@ -16,4 +16,12 @@ public partial class Cobrador
     public virtual ICollection<Donante> Donantes { get; set; } = new List<Donante>();
 
     public virtual Zona IdZonaNavigation { get; set; } = null!;
+
+    public string CodigoNombre => $"({Codigo}) {Nombre}";
+
+    public override string ToString()
+    {
+        return CodigoNombre; // Asegura que el DropdownField muestre el nombre del cobrador
+    }
+
 }

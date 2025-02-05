@@ -8,72 +8,92 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Input;
+using AppFundacion.Views;
+using CommunityToolkit.Mvvm.Messaging;
+using AppFundacion.Mensajes;
+using Microsoft.Maui.ApplicationModel.Communication;
 
 namespace AppFundacion.ViewModels
 {
     public partial class DonantesViewModel : ObservableObject
     {
+
+        // -------------------------------------------------------------------
+        // ----------------------- Definiciones ------------------------------
+        // -------------------------------------------------------------------
+
         private readonly DonanteController _donanteController;
 
         private List<Donante> _todosLosDonantes = [];
 
+        [ObservableProperty]
         private string textoBusqueda = string.Empty;
-        public string TextoBusqueda
-        {
-            get => textoBusqueda;
-            set
-            {
-                if (textoBusqueda != value)
-                {
-                    textoBusqueda = value;
-                    OnPropertyChanged(); // Notificar que la propiedad ha cambiado
-                }
-            }
-        }
-       
-        private bool isBusy;
-        public bool IsBusy
-        {
-            get => isBusy;
-            set
-            {
-                if (isBusy != value)
-                {
-                    isBusy = value;
-                    OnPropertyChanged(); // Notificar que la propiedad ha cambiado
-                }
-            }
-        }
 
-        private ObservableCollection<Donante> _listaDonantes = [];
-        public ObservableCollection<Donante> ListaDonantes
-        {
-            get => _listaDonantes;
-            set
-            {
-                if (_listaDonantes != value)
-                {
-                    _listaDonantes = value;
-                    OnPropertyChanged(); // Notificar que la propiedad ha cambiado
-                }
-            }
-        }
+        [ObservableProperty]
+        private bool isBusy;
+
+        [ObservableProperty]
+        private ObservableCollection<Donante> listaDonantes = [];
+
+        [ObservableProperty]
+        private Donante donanteSeleccionado = null!;
+
+        private readonly object _donanteAgregadoToken = new();
+
+
+        // -------------------------------------------------------------------
+        // ----------------------- Constructor -------------------------------
+        // -------------------------------------------------------------------
+
 
         public DonantesViewModel()
         {
             _donanteController = new DonanteController(new FundacionContext());
             IsBusy = true;
 
+            WeakReferenceMessenger.Default.Register<DonanteAgregadoMessage>(this, async (r, m) =>
+            {
+                if (m.Value) { 
+                    await CargarDonantesAsync();
+                    FiltrarDonantes();
+                }
+            });
+
         }
 
-        public async Task CargarDonantesAsync()
+        // -------------------------------------------------------------------
+        // ----------------------- Comandos y Consultas a DB -----------------
+        // -------------------------------------------------------------------
+
+        [RelayCommand]
+        public async Task EliminarDonanteAsync()
         {
-            var donantesList = await _donanteController.GetAllDonantes();
-            _todosLosDonantes = donantesList;
-            ListaDonantes = new ObservableCollection<Donante>(donantesList);
-            IsBusy = false;
-        }
 
+            if (DonanteSeleccionado == null)
+            {
+                await Shell.Current.DisplayAlert("Error!", "No se ha seleccionado ningun donante.", "OK");
+                return;
+            }
+
+            var confirmacion = await Shell.Current.DisplayAlert("Eliminar Donante", "¿Está seguro que desea eliminar el donante?", "Si", "No");
+
+            if (confirmacion)
+            {
+                DonanteSeleccionado.IdCobradorNavigation = null;
+                var resultado = await _donanteController.DeleteDonante(DonanteSeleccionado.Id);
+
+                if (resultado)
+                {
+                    await Shell.Current.DisplayAlert("Donante Eliminado", "El donante ha sido eliminado correctamente.", "OK");
+                    await CargarDonantesAsync();
+                    FiltrarDonantes();
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert("Error!", "No se ha podido eliminar el donante.", "OK");
+                }
+            }
+        }
 
         [RelayCommand]
         public void FiltrarDonantes()
@@ -84,16 +104,59 @@ namespace AppFundacion.ViewModels
             }
             else
             {
+                // Separamos las palabras del texto de búsqueda
+                var palabrasBusqueda = TextoBusqueda.Split([' '], StringSplitOptions.RemoveEmptyEntries)
+                                                     .Select(p => p.ToLower()) // Convertimos todo a minúsculas para una búsqueda insensible a mayúsculas
+                                                     .ToList();
+
                 ListaDonantes = new ObservableCollection<Donante>(
                     _todosLosDonantes.Where(d =>
-                        d.NombreApellido.Contains(TextoBusqueda, StringComparison.OrdinalIgnoreCase) ||
-                        d.Dni.Contains(TextoBusqueda, StringComparison.OrdinalIgnoreCase) ||
-                        d.Ciudad.Contains(TextoBusqueda, StringComparison.OrdinalIgnoreCase) ||
-                        d.Provincia.Contains(TextoBusqueda, StringComparison.OrdinalIgnoreCase)
+                        // Comprobamos si todas las palabras de búsqueda están presentes en los campos de los donantes
+                        palabrasBusqueda.All(palabra =>
+                            (d.NombreApellido?.ToLower() ?? "").Contains(palabra) ||
+                            (d.Dni?.ToLower() ?? "").Contains(palabra) ||
+                            (d.Ciudad?.ToLower() ?? "").Contains(palabra) ||
+                            (d.Provincia?.ToLower() ?? "").Contains(palabra)
+                        )
                     )
                 );
+
             }
         }
 
+
+        [RelayCommand]
+        async Task ModificarDonante()
+        {
+            if (DonanteSeleccionado != null)
+            {
+                var parametroNavigation = new Dictionary<string, object>
+                {
+                    {"donanteModificar",this.DonanteSeleccionado}
+                };
+
+                await Shell.Current.GoToAsync(nameof(DonanteModificarView), parametroNavigation);
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert("Error!", "No se ha seleccionado ningun donante.", "OK");
+            }
+        }
+
+        [RelayCommand]
+        public async Task AgregarDonante()
+        {
+            await Shell.Current.GoToAsync(nameof(DonanteAgregarView));
+        }
+
+
+
+        public async Task CargarDonantesAsync()
+        {
+            var donantesList = await _donanteController.GetAllDonantes();
+            _todosLosDonantes = donantesList;
+            ListaDonantes = new ObservableCollection<Donante>(donantesList);
+            IsBusy = false;
+        }
     }
 }
