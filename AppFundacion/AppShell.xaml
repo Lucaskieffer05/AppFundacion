@@ -7,23 +7,30 @@
     xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
     Shell.FlyoutBehavior="Locked"
     Shell.TabBarIsVisible="False"
-    Title="AppFundacion">
+    Title="AppFundacion"
+    Style="{StaticResource FlyoutGradientBackground}">
 
     <Shell.FlyoutHeader>
-        <Image Source="fundacion.png" />
+        <Image Source="fundacion.png" Margin="5"/>
     </Shell.FlyoutHeader>
 
 
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
-        <ShellContent
+        <ShellContent 
             Title="Home"
             ContentTemplate="{DataTemplate local:MainPage}"
-            Route="MainPage"/>
+            Route="MainPage"
+            />
 
         <ShellContent
             Title="Donante"
             ContentTemplate="{DataTemplate local:DonantesView}"
             Route="DonantesView" />
+
+        <ShellContent
+            Title="Donante Modificar"
+            ContentTemplate="{DataTemplate local:DonanteModificarView}"
+            Route="DonanteModificarView" />
 
     </FlyoutItem>
 

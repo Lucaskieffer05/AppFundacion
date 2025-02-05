@@ -28,6 +28,17 @@
         <Setter Property="Margin" Value="0,-5,0,5"/>
     </Style>
 
+    <Style x:Key="FlyoutGradientBackground" TargetType="Shell">
+        <Setter Property="FlyoutBackground">
+            <Setter.Value>
+                <LinearGradientBrush>
+                    <GradientStop Color="#fce0b6" Offset="0.02"/>
+                    <GradientStop Color="White" Offset="0.7"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style TargetType="Label" x:Key="VistaSinData">
         <Setter Property="FontSize" Value="Large"/>
         <Setter Property="TextColor" Value="#111827"/>

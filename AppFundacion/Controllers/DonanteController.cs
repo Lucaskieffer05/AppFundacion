@@ -23,8 +23,7 @@ namespace AppFundacion.Controllers
         {
             try
             {
-                return await _context.Donantes
-                    .Take(100) // Limita a los primeros 100 registros
+                return await _context.Donantes.Include(d => d.IdCobradorNavigation)
                     .ToListAsync();
             }
             catch (Exception ex)

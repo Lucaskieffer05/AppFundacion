@@ -108,6 +108,8 @@
     <Color x:Key="Scrim">#000000</Color>
     <Color x:Key="ScrimDark">#000000</Color>
 
+    <Color x:Key="GreenSub">#5acc71</Color>
+
 
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
     <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}"/>

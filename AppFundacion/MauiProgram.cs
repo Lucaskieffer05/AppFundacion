@@ -29,6 +29,9 @@ namespace AppFundacion
             builder.Services.AddSingleton<DonantesView>();
             builder.Services.AddSingleton<DonantesViewModel>();
 
+            builder.Services.AddSingleton<DonanteModificarView>();
+            builder.Services.AddSingleton<DonantesModificarViewModel>();
+
 
 #if DEBUG
             builder.Logging.AddDebug();

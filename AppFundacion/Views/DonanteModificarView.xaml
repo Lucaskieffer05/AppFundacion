@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<uranium:UraniumContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppFundacion.Views.DonanteModificarView"
+             xmlns:viewModels="clr-namespace:AppFundacion.ViewModels"
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+             xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+             xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+             Title="Modificar Donante">
+
+    <uranium:UraniumContentPage.BindingContext>
+        <viewModels:DonantesModificarViewModel/>
+    </uranium:UraniumContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <material:TextField Title="DNI" Text="{Binding Donante.Dni}" />
+            <material:TextField Title="Nombre y Apellido" Text="{Binding Donante.NombreApellido}" />
+            <material:TextField Title="Ciudad" Text="{Binding Donante.Ciudad}" />
+            <material:TextField Title="Provincia" Text="{Binding Donante.Provincia}" />
+            <material:TextField Title="País" Text="{Binding Donante.Pais}" />
+
+            <material:DatePickerField Title="Fecha de Ingreso" Date="{Binding Donante.FechaIngreso}" 
+                                      Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Calendar}}"/>
+
+            <material:TextField Title="Monto" Text="{Binding Donante.Monto}" Keyboard="Numeric" />
+
+            <HorizontalStackLayout Spacing="10">
+                <Button StyleClass="OutlinedButton" Text="Guardar" TextColor="{StaticResource GreenSub}" />
+                <Button StyleClass="OutlinedButton" Text="Cancelar" TextColor="{StaticResource Error}" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</uranium:UraniumContentPage>

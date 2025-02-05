@@ -23,6 +23,10 @@ public partial class Donante
 
     public int IdCobrador { get; set; }
 
+
+    // Unir Codigo y Nombre del cobrador
+    public string? CodigoNombreCobrador => $"({IdCobradorNavigation.Codigo}) {IdCobradorNavigation.Nombre}";
+
     public string? Domicilio { get; set; }
 
     public virtual Cobrador IdCobradorNavigation { get; set; } = null!;
