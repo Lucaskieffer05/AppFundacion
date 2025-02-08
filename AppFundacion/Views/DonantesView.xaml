@@ -2,7 +2,7 @@
 <uranium:UraniumContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AppFundacion.Views.DonantesView"
-             Title="DonantesView"
+             Title="Donantes"
              xmlns:viewModels="clr-namespace:AppFundacion.ViewModels"
              xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
              xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
@@ -12,41 +12,43 @@
     <uranium:UraniumContentPage.BindingContext>
         <viewModels:DonantesViewModel/>
     </uranium:UraniumContentPage.BindingContext>
+    
+    
+    
+    <ScrollView>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="140"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+            <VerticalStackLayout Grid.Row="0" >
 
-        <VerticalStackLayout Grid.Row="0" >
+                <HorizontalStackLayout Padding="30">
+                    <material:DropdownField Title="Cobrador" ItemsSource="{Binding ListaCobradores, Mode=TwoWay}"
+                                            MinimumWidthRequest="130"
+                                            SelectedItem="{Binding CobradorSeleccionado, Mode=TwoWay}"
+                                            Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.CircleChevronDown}}"/>
+                    <material:DropdownField Title="Elige una zona"
+                                            Margin="10,0,0,0"
+                                            MinimumWidthRequest="160"
+                                            ItemsSource="{Binding ListaZonas}"
+                                            SelectedItem="{Binding ZonaSeleccionada, Mode=TwoWay}"
+                                            Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.CircleChevronDown}}"/>
+                    <material:TextField Title="Buscar" WidthRequest="300" Margin="10,0,10,0" AllowClear="True" 
+                                        Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.User}}"
+                                        Text="{Binding TextoBusqueda, Mode=TwoWay}"
+                                        TextChanged="OnTextChanged"/>
+                    <Button StyleClass="FilledButton" Text="Agregar Donante" Command="{Binding AgregarDonanteCommand}" Margin="0,0,20,0"/>
+                    <Button StyleClass="OutlinedButton" Text="Ver Detalles" Command="{Binding ModificarDonanteCommand}" TextColor="#32b33b" Margin="0,0,20,0"/>
+                    <Button StyleClass="OutlinedButton" Text="Eliminar" TextColor="{StaticResource Error}" Command="{Binding EliminarDonanteCommand}" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
 
-            <HorizontalStackLayout Padding="15" Margin="20,0,40,0">
-                <material:RadioButton Text="Option 1" />
-                <material:RadioButton Text="Option 2" />
-                <material:RadioButton Text="Option 3 (Disabled)" IsDisabled="True" />
-                <material:RadioButton Text="Option 4 (Disabled)" IsDisabled="True" IsChecked="True" />
-            </HorizontalStackLayout>
-            
-            <HorizontalStackLayout Padding="15">
-                <material:TextField Title="Buscar" WidthRequest="300" Margin="20,0,40,0" AllowClear="True" 
-                                    Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.User}}"
-                                    Text="{Binding TextoBusqueda, Mode=TwoWay}"
-                                    TextChanged="OnTextChanged"/>
-                <Button StyleClass="FilledButton" Text="Agregar Donante" Command="{Binding AgregarDonanteCommand}"/>
-                <Button StyleClass="FilledTonalButton" Text="Ver Detalles" Command="{Binding ModificarDonanteCommand}"/>
-                <Button StyleClass="OutlinedButton" Text="Eliminar" TextColor="{StaticResource Error}" Command="{Binding EliminarDonanteCommand}" />
-            </HorizontalStackLayout>
-            
-        </VerticalStackLayout>
-
-        <ScrollView Grid.Row="1">
             <dg:DataGrid Grid.Row="1" ItemsSource="{Binding ListaDonantes}" Style="{StaticResource TablaComun}"             
                          IsRefreshing="{Binding IsBusy}" PaginationEnabled="True" PageSize="10" PageNumber="1"
                          SelectionMode="Single" SelectedItem="{Binding DonanteSeleccionado}">
-                <!-- Acá dentro se definen las columnas de la tabla -->
-                <!-- Ver bien el tema de configurar bien las columnas con DataTemplate -->
                 <dg:DataGrid.Columns>
                     <dg:DataGridColumn Title="Codigo"  PropertyName="Id"/>
                     <dg:DataGridColumn Title="DNI" PropertyName="Dni"/>
@@ -64,9 +66,6 @@
                     </dg:DataGridColumn>
                 </dg:DataGrid.Columns>
             </dg:DataGrid>
-        </ScrollView>
-
-    </Grid>
-    
-    
+        </Grid>
+    </ScrollView>
 </uranium:UraniumContentPage>

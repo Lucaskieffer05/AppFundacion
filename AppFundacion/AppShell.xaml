@@ -5,8 +5,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:AppFundacion.Views"
     xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
     Shell.FlyoutBehavior="Locked"
     Shell.TabBarIsVisible="False"
+    Shell.NavBarIsVisible="False"
     Title="AppFundacion"
     Style="{StaticResource FlyoutGradientBackground}">
 
@@ -18,14 +20,21 @@
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
         <ShellContent 
             Title="Home"
-            ContentTemplate="{DataTemplate local:MainPage}"
-            Route="MainPage"
-            />
+            ContentTemplate="{DataTemplate local:HomeView}"
+            Route="HomeView"
+            Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.House}, Color=Black}"/>
 
         <ShellContent
             Title="Donantes"
             ContentTemplate="{DataTemplate local:DonantesView}"
-            Route="DonantesView" />
+            Route="DonantesView" 
+            Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.User}, Color=Black}"/>
+
+        <ShellContent
+            Title="Reportes de control"
+            ContentTemplate="{DataTemplate local:ReportesView}"
+            Route="ReportesView"
+            Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.FileLines}, Color=Black}"/>
 
     </FlyoutItem>
 

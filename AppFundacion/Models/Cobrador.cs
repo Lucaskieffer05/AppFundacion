@@ -7,7 +7,7 @@ public partial class Cobrador
 {
     public int Id { get; set; }
 
-    public string Codigo { get; set; } = null!;
+    public int Codigo { get; set; } 
 
     public string Nombre { get; set; } = null!;
 

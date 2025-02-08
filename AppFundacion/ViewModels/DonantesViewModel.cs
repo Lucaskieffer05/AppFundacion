@@ -1,17 +1,12 @@
 ﻿using AppFundacion.Controllers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using AppFundacion.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Input;
 using AppFundacion.Views;
 using CommunityToolkit.Mvvm.Messaging;
 using AppFundacion.Mensajes;
-using Microsoft.Maui.ApplicationModel.Communication;
+using System.Diagnostics;
 
 namespace AppFundacion.ViewModels
 {
@@ -23,8 +18,10 @@ namespace AppFundacion.ViewModels
         // -------------------------------------------------------------------
 
         private readonly DonanteController _donanteController;
+        private readonly CobradorController _cobradorController;
+        private readonly ZonaController _zonaController;
 
-        private List<Donante> _todosLosDonantes = [];
+        public List<Donante> _todosLosDonantes = [];
 
         [ObservableProperty]
         private string textoBusqueda = string.Empty;
@@ -34,6 +31,18 @@ namespace AppFundacion.ViewModels
 
         [ObservableProperty]
         private ObservableCollection<Donante> listaDonantes = [];
+
+        [ObservableProperty]
+        private ObservableCollection<Cobrador> listaCobradores = [];
+
+        [ObservableProperty]
+        private ObservableCollection<Zona> listaZonas = [];
+
+        [ObservableProperty]
+        private Cobrador cobradorSeleccionado = new();
+
+        [ObservableProperty]
+        private Zona zonaSeleccionada = new();
 
         [ObservableProperty]
         private Donante donanteSeleccionado = null!;
@@ -49,26 +58,63 @@ namespace AppFundacion.ViewModels
         public DonantesViewModel()
         {
             _donanteController = new DonanteController(new FundacionContext());
+            _cobradorController = new CobradorController(new FundacionContext());
+            _zonaController = new ZonaController(new FundacionContext());
             IsBusy = true;
 
             WeakReferenceMessenger.Default.Register<DonanteAgregadoMessage>(this, async (r, m) =>
             {
                 if (m.Value) { 
-                    await CargarDonantesAsync();
+                    await CargarListasAsync();
                     FiltrarDonantes();
                 }
             });
 
+
+
+        }
+        partial void OnCobradorSeleccionadoChanged(Cobrador value)
+        {
+            FiltrarCobradorZona();
         }
 
-        // -------------------------------------------------------------------
-        // ----------------------- Comandos y Consultas a DB -----------------
-        // -------------------------------------------------------------------
+        partial void OnZonaSeleccionadaChanged(Zona value)
+        {
+            FiltrarCobradorZona();
+        }
+
+        public void FiltrarCobradorZona()
+        {
+            if (CobradorSeleccionado.Id == -1 && ZonaSeleccionada.Id == -1)
+            {
+                FiltrarDonantes();
+            }
+            else if (CobradorSeleccionado.Id != -1 && ZonaSeleccionada.Id == -1)
+            {
+                ListaDonantes = new ObservableCollection<Donante>(_todosLosDonantes.Where(d => d.IdCobrador == CobradorSeleccionado.Id));
+                ZonaSeleccionada = CobradorSeleccionado.IdZonaNavigation;
+                FiltrarDonantes(new List<Donante>(ListaDonantes));
+            }
+            else if (CobradorSeleccionado.Id == -1 && ZonaSeleccionada.Id != -1)
+            {
+                ListaDonantes = new ObservableCollection<Donante>(_todosLosDonantes.Where(d => d.IdCobradorNavigation!.IdZona == ZonaSeleccionada.Id));
+                FiltrarDonantes(new List<Donante>(ListaDonantes));
+            }
+            else
+            {
+                ListaDonantes = new ObservableCollection<Donante>(_todosLosDonantes.Where(d => d.IdCobrador == CobradorSeleccionado.Id && d.IdCobradorNavigation!.IdZona == ZonaSeleccionada.Id));
+                FiltrarDonantes(new List<Donante>(ListaDonantes));
+            }
+        }
+
+
+            // -------------------------------------------------------------------
+            // ----------------------- Comandos y Consultas a DB -----------------
+            // -------------------------------------------------------------------
 
         [RelayCommand]
         public async Task EliminarDonanteAsync()
         {
-
             if (DonanteSeleccionado == null)
             {
                 await Shell.Current.DisplayAlert("Error!", "No se ha seleccionado ningun donante.", "OK");
@@ -85,7 +131,7 @@ namespace AppFundacion.ViewModels
                 if (resultado)
                 {
                     await Shell.Current.DisplayAlert("Donante Eliminado", "El donante ha sido eliminado correctamente.", "OK");
-                    await CargarDonantesAsync();
+                    await CargarListasAsync();
                     FiltrarDonantes();
                 }
                 else
@@ -96,11 +142,12 @@ namespace AppFundacion.ViewModels
         }
 
         [RelayCommand]
-        public void FiltrarDonantes()
+        public void FiltrarDonantes(List<Donante>? auxListaDonantes = null)
         {
+            auxListaDonantes ??= _todosLosDonantes;
             if (string.IsNullOrWhiteSpace(TextoBusqueda))
             {
-                ListaDonantes = new ObservableCollection<Donante>(_todosLosDonantes);
+                ListaDonantes = new ObservableCollection<Donante>(auxListaDonantes);
             }
             else
             {
@@ -110,7 +157,7 @@ namespace AppFundacion.ViewModels
                                                      .ToList();
 
                 ListaDonantes = new ObservableCollection<Donante>(
-                    _todosLosDonantes.Where(d =>
+                    auxListaDonantes.Where(d =>
                         // Comprobamos si todas las palabras de búsqueda están presentes en los campos de los donantes
                         palabrasBusqueda.All(palabra =>
                             (d.NombreApellido?.ToLower() ?? "").Contains(palabra) ||
@@ -151,11 +198,22 @@ namespace AppFundacion.ViewModels
 
 
 
-        public async Task CargarDonantesAsync()
+        public async Task CargarListasAsync()
         {
             var donantesList = await _donanteController.GetAllDonantes();
             _todosLosDonantes = donantesList;
             ListaDonantes = new ObservableCollection<Donante>(donantesList);
+
+            CobradorSeleccionado = new Cobrador { Id = -1, Codigo = -1, Nombre = "Ninguno" };
+            var cobradorList = await _cobradorController.GetAllCobradores();
+            cobradorList.Insert(0, CobradorSeleccionado);
+            ListaCobradores = new ObservableCollection<Cobrador>(cobradorList);
+
+            ZonaSeleccionada = new Zona { Id = -1, Nombre = "Ninguna" };
+            var zonaList = await _zonaController.GetAllZonas();
+            zonaList.Insert(0, ZonaSeleccionada);
+            ListaZonas = new ObservableCollection<Zona>(zonaList);
+
             IsBusy = false;
         }
     }

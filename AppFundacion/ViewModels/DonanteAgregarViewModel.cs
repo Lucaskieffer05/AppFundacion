@@ -39,6 +39,7 @@ namespace AppFundacion.ViewModels
             {
                 DonanteAgregar.FechaIngreso = DateTime.Now;
             }
+            
 
         }
 

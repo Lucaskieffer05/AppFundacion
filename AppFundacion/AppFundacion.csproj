@@ -36,6 +36,7 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -59,6 +60,7 @@
 	<ItemGroup>
 		<PackageReference Include="akgul.Maui.DataGrid" Version="4.0.6" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
+		<PackageReference Include="DocumentFormat.OpenXml" Version="3.2.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.1">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -90,6 +92,9 @@
 	  <MauiXaml Update="Views\DonantesView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\ReportesView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -98,6 +103,15 @@
 
 	<ItemGroup>
 	  <Compile Remove="C:\Users\Kieff\.nuget\packages\microsoft.windowsappsdk\1.5.240802000\buildTransitive\..\include\WindowsAppSDK-VersionInfo.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Views\ReportesView.xaml.cs">
+	    <DependentUpon>ReportesView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\HomeView.xaml.cs">
+	    <DependentUpon>HomeView.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 </Project>

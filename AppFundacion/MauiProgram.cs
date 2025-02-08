@@ -5,6 +5,7 @@ using AppFundacion.ViewModels;
 using Microsoft.Extensions.Logging;
 using UraniumUI;
 using Microsoft.EntityFrameworkCore;
+using AppFundacion.ExcelServices;
 
 namespace AppFundacion
 {
@@ -28,6 +29,9 @@ namespace AppFundacion
 
             builder.Services.AddSingleton<DonantesView>();
             builder.Services.AddSingleton<DonantesViewModel>();
+
+            builder.Services.AddSingleton<ReportesView>();
+            builder.Services.AddSingleton<ReportesViewModel>();
 
             builder.Services.AddTransient<DonanteModificarView>();
             builder.Services.AddTransient<DonantesModificarViewModel>();
