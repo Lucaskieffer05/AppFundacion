@@ -70,6 +70,15 @@ namespace AppFundacion.ViewModels
                 }
             });
 
+            WeakReferenceMessenger.Default.Register<DonanteModificadoMessage>(this, async (r, m) =>
+            {
+                if (m.Value)
+                {
+                    await CargarListasAsync();
+                    FiltrarDonantes();
+                }
+            });
+
 
 
         }
@@ -160,6 +169,7 @@ namespace AppFundacion.ViewModels
                     auxListaDonantes.Where(d =>
                         // Comprobamos si todas las palabras de búsqueda están presentes en los campos de los donantes
                         palabrasBusqueda.All(palabra =>
+                            (d.Id.ToString() ?? "").Contains(palabra) ||
                             (d.NombreApellido?.ToLower() ?? "").Contains(palabra) ||
                             (d.Dni?.ToLower() ?? "").Contains(palabra) ||
                             (d.Ciudad?.ToLower() ?? "").Contains(palabra) ||
@@ -183,6 +193,7 @@ namespace AppFundacion.ViewModels
                 };
 
                 await Shell.Current.GoToAsync(nameof(DonanteModificarView), parametroNavigation);
+                Debug.WriteLine("dasd");
             }
             else
             {

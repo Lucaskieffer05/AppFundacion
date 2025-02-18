@@ -25,6 +25,7 @@ public partial class FundacionContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.UseSqlServer("Server=localhost;Initial Catalog=Fundacion;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
+
         }
     }
 
@@ -35,9 +36,10 @@ public partial class FundacionContext : DbContext
             entity.Property(e => e.Codigo).HasMaxLength(50);
             entity.Property(e => e.Nombre).HasMaxLength(100);
 
+
             entity.HasOne(d => d.IdZonaNavigation).WithMany(p => p.Cobradores)
                 .HasForeignKey(d => d.IdZona)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("FK_Cobradores_Zona");
         });
 
@@ -57,7 +59,7 @@ public partial class FundacionContext : DbContext
 
             entity.HasOne(d => d.IdCobradorNavigation).WithMany(p => p.Donantes)
                 .HasForeignKey(d => d.IdCobrador)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Donante_Cobradores");
         });
 

@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Input;
 using AppFundacion.Views;
+using AppFundacion.Mensajes;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace AppFundacion.ViewModels
 {
@@ -65,6 +67,7 @@ namespace AppFundacion.ViewModels
             {
                 await Shell.Current.DisplayAlert("Exito", "Donante modificado con exito", "OK");
                 await Shell.Current.GoToAsync("..");
+                WeakReferenceMessenger.Default.Send(new DonanteModificadoMessage(true));
             }
             else
             {

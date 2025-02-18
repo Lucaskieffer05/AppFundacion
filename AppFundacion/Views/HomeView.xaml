@@ -2,9 +2,19 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AppFundacion.Views.HomeView"
-             >
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui">
 
-    <StackLayout >
-        <Image Source="fondo4.jpg"/>
+    <StackLayout>
+        <!-- Contenido principal -->
+        <Image Source="fondoblur.jpg" 
+           Aspect="AspectFill" 
+           AbsoluteLayout.LayoutFlags="All" 
+           AbsoluteLayout.LayoutBounds="0,0,1,1" />
+
+        <!-- Capa de desenfoque -->
+        <BoxView Color="Black" 
+             Opacity="0.5" 
+             AbsoluteLayout.LayoutFlags="All" 
+             AbsoluteLayout.LayoutBounds="0,0,1,1"/>
     </StackLayout>
 </ContentPage>

@@ -15,7 +15,7 @@ public partial class Cobrador
 
     public virtual ICollection<Donante> Donantes { get; set; } = new List<Donante>();
 
-    public virtual Zona IdZonaNavigation { get; set; } = null!;
+    public virtual Zona? IdZonaNavigation { get; set; }
 
     public string CodigoNombre => $"({Codigo}) {Nombre}";
 

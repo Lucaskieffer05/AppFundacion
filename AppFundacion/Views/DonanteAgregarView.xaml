@@ -6,6 +6,7 @@
              xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
              xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
              xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+             xmlns:validations="clr-namespace:AppFundacion.Validations"
              Title="Modificar Donante">
 
     <uranium:UraniumContentPage.BindingContext>
@@ -16,7 +17,9 @@
         <VerticalStackLayout Padding="20" Spacing="15">
 
             <material:TextField Title="DNI" Text="{Binding DonanteAgregar.Dni, Mode=TwoWay}" />
-            <material:TextField Title="Nombre y Apellido" Text="{Binding DonanteAgregar.NombreApellido, Mode=TwoWay}" />
+            <material:TextField Title="Nombre y Apellido" Text="{Binding DonanteAgregar.NombreApellido, Mode=TwoWay}" >
+                <validations:NombreApellidoValidation />
+            </material:TextField>
             <material:TextField Title="Ciudad" Text="{Binding DonanteAgregar.Ciudad, Mode=TwoWay}" />
             <material:TextField Title="Provincia" Text="{Binding DonanteAgregar.Provincia, Mode=TwoWay}" />
             <material:TextField Title="País" Text="{Binding DonanteAgregar.Pais, Mode=TwoWay}" />

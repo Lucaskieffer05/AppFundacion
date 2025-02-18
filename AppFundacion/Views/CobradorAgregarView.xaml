@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<uranium:UraniumContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppFundacion.Views.CobradorAgregarView"
+             Title="CobradorAgregarView"
+             xmlns:viewModels="clr-namespace:AppFundacion.ViewModels"
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+             xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+             xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
+             xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome">
+
+
+    <uranium:UraniumContentPage.BindingContext>
+        <viewModels:CobradorAgregarViewModel/>
+    </uranium:UraniumContentPage.BindingContext>
+
+
+    <ScrollView>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+
+            <HorizontalStackLayout Padding="30">
+                <material:TextField Title="Nombre" WidthRequest="300" Margin="10,0,10,0" AllowClear="True" 
+                                            Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.User}}"
+                                            Text="{Binding CobradorAgregar.Nombre, Mode=TwoWay}"/>
+                <material:TextField Title="Codigo" WidthRequest="300" Margin="10,0,10,0" AllowClear="True" 
+                                            Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.User}}"
+                                            Text="{Binding CobradorAgregar.Codigo, Mode=TwoWay}"/>
+                <material:DropdownField Title="Elige una zona"
+                                                Margin="10,0,0,0"
+                                                MinimumWidthRequest="160"
+                                                ItemsSource="{Binding ListaZonas}"
+                                                SelectedItem="{Binding ZonaSeleccionada, Mode=TwoWay}"
+                                                Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.CircleChevronDown}}"/>
+                <Button StyleClass="FilledButton" Text="Agregar Cobrador" Command="{Binding AgregarCobradorCommand}" Margin="0,0,20,0"/>
+                <Button StyleClass="OutlinedButton" Text="Eliminar Cobrador" TextColor="{StaticResource Error}" Command="{Binding EliminarCobradorCommand}" />
+            </HorizontalStackLayout>
+
+            <dg:DataGrid Grid.Row="1" ItemsSource="{Binding ListaCobradores}" Style="{StaticResource TablaComun}"             
+                             IsRefreshing="{Binding IsBusy}" PaginationEnabled="True" PageSize="20" PageNumber="1"
+                             SelectionMode="Single" SelectedItem="{Binding CobradorSeleccionado}">
+                <dg:DataGrid.Columns>
+                    <dg:DataGridColumn Title="Codigo"  PropertyName="Codigo"/>
+                    <dg:DataGridColumn Title="Nombre" PropertyName="Nombre"/>
+                    <dg:DataGridColumn Title="Zona">
+                        <dg:DataGridColumn.CellTemplate>
+                            <DataTemplate>
+                                <Label Text="{Binding IdZonaNavigation.Nombre}" 
+                                   HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </DataTemplate>
+                        </dg:DataGridColumn.CellTemplate>
+                    </dg:DataGridColumn>
+                </dg:DataGrid.Columns>
+            </dg:DataGrid>
+        </Grid>
+    </ScrollView>
+</uranium:UraniumContentPage>

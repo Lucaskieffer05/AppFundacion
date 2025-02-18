@@ -54,7 +54,6 @@
                     <dg:DataGridColumn Title="DNI" PropertyName="Dni"/>
                     <dg:DataGridColumn Title="Nombre y Aplleido" PropertyName="NombreApellido"/>
                     <dg:DataGridColumn Title="Ciudad" PropertyName="Ciudad"/>
-                    <dg:DataGridColumn Title="Provincia" PropertyName="Provincia"/>
                     <dg:DataGridColumn Title="Monto" PropertyName="Monto"/>
                     <dg:DataGridColumn Title="Cobrador">
                         <dg:DataGridColumn.CellTemplate>

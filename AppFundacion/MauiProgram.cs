@@ -30,8 +30,8 @@ namespace AppFundacion
             builder.Services.AddSingleton<DonantesView>();
             builder.Services.AddSingleton<DonantesViewModel>();
 
-            builder.Services.AddSingleton<ReportesView>();
-            builder.Services.AddSingleton<ReportesViewModel>();
+            builder.Services.AddTransient<ReportesView>();
+            builder.Services.AddTransient<ReportesViewModel>();
 
             builder.Services.AddTransient<DonanteModificarView>();
             builder.Services.AddTransient<DonantesModificarViewModel>();

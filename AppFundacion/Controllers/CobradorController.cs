@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,11 +22,11 @@ namespace AppFundacion.Controllers
         {
             try
             {
-                return await _context.Cobradores.Include(static c => c.IdZonaNavigation).ToListAsync();
+                return await _context.Cobradores.Include(static c => c.IdZonaNavigation).OrderBy(c => c.Codigo).ToListAsync();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
                 return [];
             }
         }
@@ -53,10 +54,84 @@ namespace AppFundacion.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error al obtener datos: {ex.Message}");
+                Debug.WriteLine($"Error al obtener datos: {ex.Message}");
                 return new Dictionary<string, List<Donante>>();
             }
         }
+
+        // Agregar cobrador
+        public async Task<bool> AddCobrador(Cobrador cobrador)
+        {
+            try
+            {
+                _context.Cobradores.Add(cobrador);
+                await _context.SaveChangesAsync();
+
+                // Guardar los cambios nuevamente para actualizar el campo Codigo
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        // Eliminar cobrador
+        public async Task<bool> DeleteCobrador(int id)
+        {
+            try
+             {
+                var cobrador = await _context.Cobradores.FindAsync(id);
+                if (cobrador == null)
+                {
+                    return false;
+                }
+
+                _context.Cobradores.Remove(cobrador);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        // Verificar si se puede eliminar un cobrador
+        public bool VerificarEliminarCobrador(int id)
+        {
+            try
+            {
+                var donantes = _context.Donantes
+                    .Where(c => c.IdCobrador == id)
+                    .ToList();
+                return donantes.Count == 0;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        // Verificar codigos duplicados
+        public bool VerificarCodigoDuplicado(int codigo)
+        {
+            try
+            {
+                return _context.Cobradores.Any(c => c.Codigo == codigo);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
 
     }
 }

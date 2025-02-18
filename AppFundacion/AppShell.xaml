@@ -8,7 +8,6 @@
     xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
     Shell.FlyoutBehavior="Locked"
     Shell.TabBarIsVisible="False"
-    Shell.NavBarIsVisible="False"
     Title="AppFundacion"
     Style="{StaticResource FlyoutGradientBackground}">
 
@@ -35,6 +34,12 @@
             ContentTemplate="{DataTemplate local:ReportesView}"
             Route="ReportesView"
             Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.FileLines}, Color=Black}"/>
+
+        <ShellContent
+            Title="Gestion Cobradores"
+            ContentTemplate="{DataTemplate local:CobradorAgregarView}"
+            Route="CobradorAgregarView"
+            Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Gear}, Color=Black}"/> 
 
     </FlyoutItem>
 
