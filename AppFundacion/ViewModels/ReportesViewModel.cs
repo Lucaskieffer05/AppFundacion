@@ -179,7 +179,7 @@ namespace AppFundacion.ViewModels
                             $"<td>{donante.Domicilio}</td>" +
                             $"<td>{donante.Ciudad}</td>" +
                             $"<td>{donante.Dni}</td>" +
-                            $"<td>{donante.FechaIngreso}</td>" +
+                            $"<td>{donante.FechaIngreso?.ToString("dd/MM/yyyy")}</td>" +
                             $"<td>{donante.Monto}</td>" +
                         $"</tr>");
                     montoTotal = montoTotal + donante.Monto;

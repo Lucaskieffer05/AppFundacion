@@ -39,6 +39,9 @@ namespace AppFundacion
             builder.Services.AddTransient<DonanteAgregarView>();
             builder.Services.AddTransient<DonanteAgregarViewModel>();
 
+            builder.Services.AddTransient<CobradorAgregarView>();
+            builder.Services.AddTransient<CobradorAgregarViewModel>();
+
 
 #if DEBUG
             builder.Logging.AddDebug();

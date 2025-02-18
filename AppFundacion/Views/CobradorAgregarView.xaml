@@ -23,22 +23,30 @@
             </Grid.RowDefinitions>
 
 
-            <HorizontalStackLayout Padding="30">
+            <Grid Padding="30">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <HorizontalStackLayout Padding="30" Grid.Column="0">
                 <material:TextField Title="Nombre" WidthRequest="300" Margin="10,0,10,0" AllowClear="True" 
                                             Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.User}}"
                                             Text="{Binding CobradorAgregar.Nombre, Mode=TwoWay}"/>
                 <material:TextField Title="Codigo" WidthRequest="300" Margin="10,0,10,0" AllowClear="True" 
                                             Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.User}}"
                                             Text="{Binding CobradorAgregar.Codigo, Mode=TwoWay}"/>
-                <material:DropdownField Title="Elige una zona"
-                                                Margin="10,0,0,0"
-                                                MinimumWidthRequest="160"
-                                                ItemsSource="{Binding ListaZonas}"
-                                                SelectedItem="{Binding ZonaSeleccionada, Mode=TwoWay}"
-                                                Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.CircleChevronDown}}"/>
-                <Button StyleClass="FilledButton" Text="Agregar Cobrador" Command="{Binding AgregarCobradorCommand}" Margin="0,0,20,0"/>
-                <Button StyleClass="OutlinedButton" Text="Eliminar Cobrador" TextColor="{StaticResource Error}" Command="{Binding EliminarCobradorCommand}" />
-            </HorizontalStackLayout>
+                
+                <material:DropdownField Title="Selecciona una zona"                                 
+                                        ItemsSource="{Binding ListaZonas, Mode=TwoWay}"
+                                        SelectedItem="{Binding ZonaSeleccionada, Mode=TwoWay}"/>
+                </HorizontalStackLayout>
+
+                <Button Grid.Column="1" StyleClass="FilledButton" Text="Agregar Cobrador" Command="{Binding AgregarCobradorCommand}" Margin="0,0,20,0"/>
+                <Button Grid.Column="2" StyleClass="OutlinedButton" Text="Eliminar Cobrador" TextColor="{StaticResource Error}" Command="{Binding EliminarCobradorCommand}" />
+            </Grid>
 
             <dg:DataGrid Grid.Row="1" ItemsSource="{Binding ListaCobradores}" Style="{StaticResource TablaComun}"             
                              IsRefreshing="{Binding IsBusy}" PaginationEnabled="True" PageSize="20" PageNumber="1"

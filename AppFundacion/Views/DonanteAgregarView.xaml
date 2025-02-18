@@ -20,6 +20,7 @@
             <material:TextField Title="Nombre y Apellido" Text="{Binding DonanteAgregar.NombreApellido, Mode=TwoWay}" >
                 <validations:NombreApellidoValidation />
             </material:TextField>
+            <material:TextField Title="Domicilio" Text="{Binding DonanteAgregar.Domicilio, Mode=TwoWay}" />
             <material:TextField Title="Ciudad" Text="{Binding DonanteAgregar.Ciudad, Mode=TwoWay}" />
             <material:TextField Title="Provincia" Text="{Binding DonanteAgregar.Provincia, Mode=TwoWay}" />
             <material:TextField Title="País" Text="{Binding DonanteAgregar.Pais, Mode=TwoWay}" />
@@ -27,9 +28,12 @@
             <material:DatePickerField Title="Fecha de Ingreso" Date="{Binding DonanteAgregar.FechaIngreso, Mode=TwoWay}" 
                                       Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Calendar}}"/>
 
-            <material:TextField Title="Monto" Text="{Binding DonanteAgregar.Monto, Mode=TwoWay}" Keyboard="Numeric" />
+            <material:TextField Title="Monto" Text="{Binding DonanteAgregar.Monto, Mode=TwoWay}" Keyboard="Numeric">
+                <validations:MontoValidation/>
+            </material:TextField>
 
-            <material:DropdownField Title="Cobrador" ItemsSource="{Binding ListaCobradores, Mode=TwoWay}" 
+            <material:DropdownField Title="Cobrador" 
+                                    ItemsSource="{Binding ListaCobradores, Mode=TwoWay}" 
                                     SelectedItem="{Binding DonanteAgregar.IdCobradorNavigation, Mode=TwoWay}"/>
 
 

@@ -58,9 +58,9 @@ namespace AppFundacion.ViewModels
         [RelayCommand]
         async Task AgregarDonante()
         {
-            if (DonanteAgregar == null || DonanteAgregar.IdCobradorNavigation == null || DonanteAgregar.NombreApellido == "")
+            if (DonanteAgregar == null || DonanteAgregar.IdCobradorNavigation == null || DonanteAgregar.NombreApellido == "" || DonanteAgregar.Monto < 0)
             {
-                await Shell.Current.DisplayAlert("Error", "Ocurrió un error al agregar el donante", "OK");
+                await Shell.Current.DisplayAlert("Error", "Ocurrió un error al agregar el donante. Verifica el campo de cobrador, nombre y monto", "OK");
                 return;
             }
 

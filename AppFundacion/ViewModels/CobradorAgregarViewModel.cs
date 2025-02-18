@@ -23,13 +23,13 @@ namespace AppFundacion.ViewModels
         private bool isBusy;
 
         [ObservableProperty]
-        private ObservableCollection<Zona> listaZonas = new();
+        private ObservableCollection<Zona> listaZonas = [];
 
         [ObservableProperty]
         private Zona zonaSeleccionada = new();
 
         [ObservableProperty]
-        private ObservableCollection<Cobrador> listaCobradores = new();
+        private ObservableCollection<Cobrador> listaCobradores = [];
 
         [ObservableProperty]
         private Cobrador cobradorSeleccionado = new();
