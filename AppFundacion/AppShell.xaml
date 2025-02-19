@@ -36,6 +36,12 @@
             Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.FileLines}, Color=Black}"/>
 
         <ShellContent
+            Title="Operaciones adicionales"
+            ContentTemplate="{DataTemplate local:FuncionalidadesExtrasView}"
+            Route="FuncionalidadesExtrasView"
+            Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Briefcase}, Color=Black}"/>
+
+        <ShellContent
             Title="Gestion Cobradores"
             ContentTemplate="{DataTemplate local:CobradorAgregarView}"
             Route="CobradorAgregarView"

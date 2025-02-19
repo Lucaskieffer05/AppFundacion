@@ -17,9 +17,9 @@ namespace AppFundacion.ViewModels
         // ----------------------- Definiciones ------------------------------
         // -------------------------------------------------------------------
 
-        private readonly DonanteController _donanteController;
-        private readonly CobradorController _cobradorController;
-        private readonly ZonaController _zonaController;
+        private DonanteController _donanteController;
+        private CobradorController _cobradorController;
+        private ZonaController _zonaController;
 
         public List<Donante> _todosLosDonantes = [];
 
@@ -60,7 +60,6 @@ namespace AppFundacion.ViewModels
             _donanteController = new DonanteController(new FundacionContext());
             _cobradorController = new CobradorController(new FundacionContext());
             _zonaController = new ZonaController(new FundacionContext());
-            IsBusy = true;
 
             WeakReferenceMessenger.Default.Register<DonanteAgregadoMessage>(this, async (r, m) =>
             {
@@ -151,6 +150,16 @@ namespace AppFundacion.ViewModels
         }
 
         [RelayCommand]
+        public async Task RecargarTabla()
+        {
+            _donanteController = new DonanteController(new FundacionContext());
+            _cobradorController = new CobradorController(new FundacionContext());
+            _zonaController = new ZonaController(new FundacionContext());
+            await CargarListasAsync();
+            FiltrarDonantes();
+        }
+
+        [RelayCommand]
         public void FiltrarDonantes(List<Donante>? auxListaDonantes = null)
         {
             auxListaDonantes ??= _todosLosDonantes;
@@ -211,6 +220,7 @@ namespace AppFundacion.ViewModels
 
         public async Task CargarListasAsync()
         {
+            IsBusy = true;
             var donantesList = await _donanteController.GetAllDonantes();
             _todosLosDonantes = donantesList;
             ListaDonantes = new ObservableCollection<Donante>(donantesList);

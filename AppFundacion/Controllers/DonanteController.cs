@@ -85,5 +85,63 @@ namespace AppFundacion.Controllers
                 return false;
             }
         }
+
+        // Asignar nuevo cobrador al donante
+        public async Task<bool> TransferirDonantes(List<Donante> listaDonantes, Cobrador cobradorDestino)
+        {
+            try
+            {
+                foreach (var donante in listaDonantes)
+                {
+                    donante.IdCobrador = cobradorDestino.Id;
+                    _context.Entry(donante).State = EntityState.Modified;
+                }
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        // Actualizar montos
+        public async Task<(bool, int)> ActualizarMontos(List<Donante> listaDonantes, int? viejoMonto, int? nuevoMonto, bool menorIgual)
+        {
+            try
+            {
+                int count = 0;
+                foreach (var donante in listaDonantes)
+                {
+                    if (menorIgual)
+                    {
+                        if (donante.Monto <= viejoMonto && nuevoMonto != null)
+                        {
+                            donante.Monto = (int)nuevoMonto;
+                            _context.Entry(donante).State = EntityState.Modified;
+                            count++;
+                        }
+                    }
+                    else
+                    {
+                        if (donante.Monto == viejoMonto && nuevoMonto != null)
+                        {
+                            donante.Monto = (int)nuevoMonto;
+                            _context.Entry(donante).State = EntityState.Modified;
+                            count++;
+                        }
+                    }
+
+                }
+                await _context.SaveChangesAsync();
+                return (true, count);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return (false, 0);
+            }
+        }
     }
 }

@@ -42,6 +42,9 @@ namespace AppFundacion
             builder.Services.AddTransient<CobradorAgregarView>();
             builder.Services.AddTransient<CobradorAgregarViewModel>();
 
+            builder.Services.AddTransient<FuncionalidadesExtrasView>();
+            builder.Services.AddTransient<FuncionalidadesExtrasViewModel>();
+
 
 #if DEBUG
             builder.Logging.AddDebug();

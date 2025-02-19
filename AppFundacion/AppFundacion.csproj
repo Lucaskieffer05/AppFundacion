@@ -95,6 +95,9 @@
 	  <MauiXaml Update="Views\DonantesView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\FuncionalidadesExtrasView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\ReportesView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -114,6 +117,9 @@
 	<ItemGroup>
 	  <Compile Update="Views\CobradorAgregarView.xaml.cs">
 	    <DependentUpon>CobradorAgregarView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\FuncionalidadesExtrasView.xaml.cs">
+	    <DependentUpon>FuncionalidadesExtrasView.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\ReportesView.xaml.cs">
 	    <DependentUpon>ReportesView.xaml</DependentUpon>
