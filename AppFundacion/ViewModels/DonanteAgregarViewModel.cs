@@ -20,7 +20,7 @@ namespace AppFundacion.ViewModels
         private readonly DonanteController _donanteController;
 
         [ObservableProperty]
-        private Donante? donanteAgregar = new();
+        private Donante? donanteAgregar = null;
 
         [ObservableProperty]
         private ObservableCollection<Cobrador> listaCobradores = [];

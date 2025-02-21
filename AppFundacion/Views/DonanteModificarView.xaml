@@ -17,6 +17,7 @@
 
             <material:TextField Title="DNI" Text="{Binding DonanteModificar.Dni}" />
             <material:TextField Title="Nombre y Apellido" Text="{Binding DonanteModificar.NombreApellido}" />
+            <material:TextField Title="Domicilio" Text="{Binding DonanteModificar.Domicilio}" />
             <material:TextField Title="Ciudad" Text="{Binding DonanteModificar.Ciudad}" />
             <material:TextField Title="Provincia" Text="{Binding DonanteModificar.Provincia}" />
             <material:TextField Title="País" Text="{Binding DonanteModificar.Pais}" />

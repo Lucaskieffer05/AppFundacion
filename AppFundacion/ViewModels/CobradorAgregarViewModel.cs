@@ -26,7 +26,7 @@ namespace AppFundacion.ViewModels
         private ObservableCollection<Zona> listaZonas = [];
 
         [ObservableProperty]
-        private Zona zonaSeleccionada = new();
+        private Zona? zonaSeleccionada = null;
 
         [ObservableProperty]
         private ObservableCollection<Cobrador> listaCobradores = [];

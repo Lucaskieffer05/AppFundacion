@@ -47,26 +47,28 @@
                     <Button StyleClass="FilledTonalButton" Text="Recargar Tabla" Command="{Binding RecargarTablaCommand}"/>
                 </HorizontalStackLayout>
             </VerticalStackLayout>
-
-            <dg:DataGrid Grid.Row="1" ItemsSource="{Binding ListaDonantes}" Style="{StaticResource TablaComun}"             
-                         IsRefreshing="{Binding IsBusy}" PaginationEnabled="True" PageSize="10" PageNumber="1"
-                         SelectionMode="Single" SelectedItem="{Binding DonanteSeleccionado}">
-                <dg:DataGrid.Columns>
-                    <dg:DataGridColumn Title="Codigo"  PropertyName="Id"/>
-                    <dg:DataGridColumn Title="DNI" PropertyName="Dni"/>
-                    <dg:DataGridColumn Title="Nombre y Aplleido" PropertyName="NombreApellido"/>
-                    <dg:DataGridColumn Title="Ciudad" PropertyName="Ciudad"/>
-                    <dg:DataGridColumn Title="Monto" PropertyName="Monto"/>
-                    <dg:DataGridColumn Title="Cobrador">
-                        <dg:DataGridColumn.CellTemplate>
-                            <DataTemplate>
-                                <Label Text="{Binding IdCobradorNavigation.CodigoNombre}" 
-                                       HorizontalOptions="Center" VerticalOptions="Center"/>
-                            </DataTemplate>
-                        </dg:DataGridColumn.CellTemplate>
-                    </dg:DataGridColumn>
-                </dg:DataGrid.Columns>
-            </dg:DataGrid>
+            <Border Stroke="Silver" StrokeThickness="5" Grid.Row="1"  Margin="100,0,100,0">
+                <dg:DataGrid  ItemsSource="{Binding ListaDonantes}" Style="{StaticResource TablaComun}"             
+                             IsRefreshing="{Binding IsBusy}" PaginationEnabled="True" PageSize="15" PageNumber="1"
+                             SelectionMode="Single" SelectedItem="{Binding DonanteSeleccionado}"
+                              BorderColor="Black">
+                    <dg:DataGrid.Columns>
+                        <dg:DataGridColumn Title="Codigo"  PropertyName="Id"/>
+                        <dg:DataGridColumn Title="DNI" PropertyName="Dni"/>
+                        <dg:DataGridColumn Title="Nombre y Aplleido" PropertyName="NombreApellido"/>
+                        <dg:DataGridColumn Title="Ciudad" PropertyName="Ciudad"/>
+                        <dg:DataGridColumn Title="Monto" PropertyName="Monto"/>
+                        <dg:DataGridColumn Title="Cobrador">
+                            <dg:DataGridColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Label Text="{Binding IdCobradorNavigation.CodigoNombre}" 
+                                           HorizontalOptions="Center" VerticalOptions="Center"/>
+                                </DataTemplate>
+                            </dg:DataGridColumn.CellTemplate>
+                        </dg:DataGridColumn>
+                    </dg:DataGrid.Columns>
+                </dg:DataGrid>
+            </Border>
         </Grid>
     </ScrollView>
 </uranium:UraniumContentPage>

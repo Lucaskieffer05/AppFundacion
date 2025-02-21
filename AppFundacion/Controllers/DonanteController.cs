@@ -106,6 +106,40 @@ namespace AppFundacion.Controllers
             }
         }
 
+
+        // Método para obtener cobradores sin donantes asignados
+        public async Task<List<Cobrador>> GetCobradoresSinDonantes()
+        {
+            try
+            {
+                return await _context.Cobradores
+                .Include(c => c.Donantes)
+                .Where(c => !c.Donantes.Any())
+                .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return [];
+            }
+            
+        }
+
+        // Método para obtener la cantidad total de donantes
+        public async Task<int> GetTotalDonantes()
+        {
+            try 
+            {
+                return await _context.Donantes.CountAsync();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return 0;
+            }
+            
+        }
+
         // Actualizar montos
         public async Task<(bool, int)> ActualizarMontos(List<Donante> listaDonantes, int? viejoMonto, int? nuevoMonto, bool menorIgual)
         {

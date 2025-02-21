@@ -1,20 +1,90 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AppFundacion.Views.HomeView"
+             xmlns:vm="clr-namespace:AppFundacion.ViewModels"
              xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui">
 
-    <StackLayout>
-        <!-- Contenido principal -->
-        <Image Source="fondoblur.jpg" 
-           Aspect="AspectFill" 
-           AbsoluteLayout.LayoutFlags="All" 
-           AbsoluteLayout.LayoutBounds="0,0,1,1" />
 
-        <!-- Capa de desenfoque -->
-        <BoxView Color="Black" 
-             Opacity="0.5" 
-             AbsoluteLayout.LayoutFlags="All" 
-             AbsoluteLayout.LayoutBounds="0,0,1,1"/>
-    </StackLayout>
+    <ContentPage.BindingContext>
+        <vm:HomeViewModel />
+    </ContentPage.BindingContext>
+    <AbsoluteLayout>
+        <!-- Imagen de fondo -->
+        <Image Source="fondoblur.jpg"
+               Aspect="AspectFill"
+               AbsoluteLayout.LayoutBounds="0,0,1,1"
+               AbsoluteLayout.LayoutFlags="All" />
+
+        <!-- Capa de desenfoque (opcional) -->
+        <BoxView Color="Black"
+                 Opacity="0.4"
+                 AbsoluteLayout.LayoutBounds="0,0,1,1"
+                 AbsoluteLayout.LayoutFlags="All" />
+
+        <ScrollView>
+            <StackLayout Padding="20" Spacing="10">
+                <!-- Bienvenida y Descripción -->
+                <Label Text="Bienvenido a la Fundación Santafesina Virgen de Luján"
+                       FontSize="40"
+                       TextColor="#f5f4e6"
+                       FontFamily="Raleway-Regular"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Start"/>
+                <Label Text="Esta aplicación te ayudará a gestionar donantes, cobradores y reportes de manera eficiente."
+                       FontSize="15"
+                       FontFamily="OpenSans-Semibold"
+                       TextColor="#f5f4e6"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Start" />
+
+                <!-- Estadísticas -->
+                <Grid ColumnDefinitions="*,*,*" Margin="0,30,0,0" HorizontalOptions="Fill">
+                    <Label Text="{Binding TotalDonantes, StringFormat='Total de Donantes: {0}'}" FontSize="20" TextColor="Black" FontAttributes="Bold" Grid.Column="0" HorizontalTextAlignment="Center" TextDecorations="Underline"/>
+                    <VerticalStackLayout Grid.Column="1">
+                        <Label Text="Cobradores sin Donantes:" FontSize="20" TextColor="Black" Grid.Column="1" FontAttributes="Bold" HorizontalTextAlignment="Center" Margin="0,0,0,10" TextDecorations="Underline"/>
+                        <CollectionView ItemsSource="{Binding CobradoresSinDonantes, Mode=TwoWay}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border HorizontalOptions="Center" WidthRequest="200">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="10"/>
+                                        </Border.StrokeShape>
+                                        <Grid>
+                                            <BoxView BackgroundColor="black" Opacity="0.2"/>
+
+                                            <Label Text="{Binding CodigoNombre}" FontAttributes="Bold" TextColor="White" Margin="5"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center">
+                        <Label Text="Donantes por Zona:" FontSize="20" TextColor="Black" Margin="0,0,0,10" FontAttributes="Bold" HorizontalTextAlignment="Center" TextDecorations="Underline"/>
+                        <CollectionView ItemsSource="{Binding DonantesPorZona, Mode=TwoWay}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border HorizontalOptions="Center" WidthRequest="200">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="10"/>
+                                        </Border.StrokeShape>
+                                        <Grid>
+                                            <BoxView BackgroundColor="black" Opacity="0.2"/>
+
+                                            <HorizontalStackLayout HorizontalOptions="Center" Margin="5">
+                                                <Label Text="{Binding Key}" FontSize="14" FontAttributes="Bold" TextColor="White"/>
+                                                <Label Text=":" FontSize="14" FontAttributes="Bold" TextColor="White"/>
+                                                <Label Text="{Binding Value}" FontSize="14" FontAttributes="Bold" TextColor="White" Margin="10,0,0,0"/>
+                                            </HorizontalStackLayout>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Grid>
+            </StackLayout>
+        </ScrollView>
+    </AbsoluteLayout>
 </ContentPage>

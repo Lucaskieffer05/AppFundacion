@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using AppFundacion.Controllers;
 using System.Text;
 using System.Diagnostics;
+using Microsoft.Extensions.Primitives;
 
 namespace AppFundacion.ViewModels
 {
@@ -25,7 +26,13 @@ namespace AppFundacion.ViewModels
         private int opcionSeleccionada;
 
         [ObservableProperty]
+        private int opcionSeleccionadaTarjeta;
+
+        [ObservableProperty]
         private bool visibleDropdown;
+
+        [ObservableProperty]
+        private bool visibleDropdownTarjeta;
 
         [ObservableProperty]
         private List<Zona> listaZonas = [];
@@ -34,7 +41,12 @@ namespace AppFundacion.ViewModels
         private List<Donante> listaDonantes = [];
 
         [ObservableProperty]
-        private Zona zonaSeleccionada = new();
+        private Zona? zonaSeleccionada = null;
+
+        [ObservableProperty]
+        private Zona? zonaSeleccionadaTarjeta = null;
+
+
 
         // -------------------------------------------------------------------
         // ----------------------- Constructor -------------------------------
@@ -47,7 +59,9 @@ namespace AppFundacion.ViewModels
             _excelControler = new ExcelControler();
             DonantesPorCobrador = new Dictionary<string, List<Donante>>();
             OpcionSeleccionada = 0;
+            OpcionSeleccionadaTarjeta = 0;
             VisibleDropdown = false;
+            VisibleDropdownTarjeta = false;
 
         }
 
@@ -60,6 +74,15 @@ namespace AppFundacion.ViewModels
 
         }
 
+        // Método que se ejecuta cuando cambia OpcionSeleccionada
+        partial void OnOpcionSeleccionadaTarjetaChanged(int value)
+        {
+            Debug.WriteLine($"OpcionSeleccionada cambió a: {value}");
+            VisibleDropdownTarjeta = value == 2 ? true : false;
+            OnPropertyChanged(nameof(VisibleDropdownTarjeta));
+
+        }
+
 
         // -------------------------------------------------------------------
         // ----------------------- Comandos y Consultas a DB -----------------
@@ -69,12 +92,6 @@ namespace AppFundacion.ViewModels
         {
             ListaDonantes = await _donanteController.GetAllDonantes();
             ListaZonas = await _zonaController.GetAllZonas();
-
-            if (ListaZonas.Any())
-            {
-                ZonaSeleccionada = ListaZonas.First(); // Asignar la primera zona como predeterminada
-            }
-
         }
 
         // -------------------------------------------------------------------------
@@ -83,7 +100,7 @@ namespace AppFundacion.ViewModels
 
         public string SeleccionReporteHtml()
         {
-            if (ZonaSeleccionada == null || ZonaSeleccionada == new Zona() || OpcionSeleccionada == 0 )
+            if (OpcionSeleccionada == 0 )
             {
                 return "";
             }
@@ -104,6 +121,10 @@ namespace AppFundacion.ViewModels
             }
             else if (OpcionSeleccionada == 2)
             {
+                if (ZonaSeleccionada == null || ZonaSeleccionada == new Zona())
+                {
+                    return "";
+                }
                 // Filtrar primero por ZonaSeleccionada
                 var donantesFiltrados = ListaDonantes
                     .Where(d => d.IdCobradorNavigation != null && d.IdCobradorNavigation.IdZona == ZonaSeleccionada.Id);
@@ -124,6 +145,56 @@ namespace AppFundacion.ViewModels
             }
         }
 
+        public string SeleccionTarjetasHtml()
+        {
+            if (OpcionSeleccionadaTarjeta == 0)
+            {
+                return "";
+            }
+
+            if (OpcionSeleccionadaTarjeta == 1)
+            {
+                // Agrupar por IdCobrador en lugar de CodigoNombre
+                DonantesPorCobrador = ListaDonantes
+                    .Where(d => d.IdCobradorNavigation != null)
+                    .GroupBy(d => d.IdCobradorNavigation!.Id) // Agrupación por IdCobrador
+                    .OrderBy(group => group.First().IdCobradorNavigation!.Codigo) // Ordenar los grupos por Codigo
+                    .ToDictionary(
+                        group => group.First().IdCobradorNavigation!.CodigoNombre, // Usar CodigoNombre como clave
+                        group => group.OrderBy(d => d.IdCobradorNavigation!.Codigo).ToList() // Ordenar cada grupo internamente
+                    );
+
+                return GenerateHtmlTarjetas(DonantesPorCobrador, zona: "General");
+            }
+            else if (OpcionSeleccionadaTarjeta == 2)
+            {
+                if (ZonaSeleccionadaTarjeta == null || ZonaSeleccionadaTarjeta == new Zona())
+                {
+                    return "";
+                }
+
+                // Filtrar primero por ZonaSeleccionadaTarjeta
+                var donantesFiltrados = ListaDonantes
+                    .Where(d => d.IdCobradorNavigation != null && d.IdCobradorNavigation.IdZona == ZonaSeleccionadaTarjeta.Id);
+
+                // Agrupar por IdCobrador y ordenar por Codigo del cobrador
+                DonantesPorCobrador = donantesFiltrados
+                    .GroupBy(d => d.IdCobradorNavigation!.Id)
+                    .OrderBy(group => group.First().IdCobradorNavigation!.Codigo) // Ordenar grupos por Codigo del cobrador
+                    .ToDictionary(
+                        group => group.First().IdCobradorNavigation!.CodigoNombre, // Usar CodigoNombre como clave
+                        group => group.OrderBy(d => d.IdCobradorNavigation!.Codigo).ToList() // Ordenar donantes dentro de cada grupo
+                    );
+                return GenerateHtmlTarjetas(DonantesPorCobrador, zona: ZonaSeleccionadaTarjeta.Nombre!);
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+
+
 
 
         public string GenerateHtmlReport(Dictionary<string, List<Donante>> donantesPorCobrador, string zona)
@@ -137,12 +208,13 @@ namespace AppFundacion.ViewModels
                         "body { font-family: Arial, sans-serif; font-size: 12px; margin: 0; padding: 0; }" +
                         ".header { font-family: Times, serif; text-align: left; font-size: 14px; font-weight: bold; margin-bottom: 20px; }" +
                         "table { width: 100%; border-collapse: collapse; font-size: 8px; margin-bottom: 20px; }" +
-                        "th, td { border: 1px solid black; padding: 5px; text-align: center; }" +
-                        "thead { display: table-header-group; }" +
+                        "th, td { border: 1px solid black; padding: 2px 5px; text-align: center; line-height: 1.2; }" + // Ajuste de espacio
+                        "thead { display: table-header-group; background-color: #d3d3d3; -webkit-print-color-adjust: exact; print-color-adjust: exact; }" +
                         "@media print {" +
                             "@page { margin: 2cm; }" +
                             "body { margin: 0; padding: 0; }" +
                             ".header { position: relative; page-break-after: avoid; }" +
+                            "thead th { background-color: #d3d3d3 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }" + // Refuerzo del color
                         "}" +
                     "</style>" +
                 "</head>" +
@@ -194,6 +266,79 @@ namespace AppFundacion.ViewModels
 
             return html.ToString();
         }
+
+
+        public string GenerateHtmlTarjetas(Dictionary<string, List<Donante>> donantesPorCobrador, string zona)
+        {
+            var html = new StringBuilder();
+            html.Append(
+                "<html>" +
+                "<head>" +
+                    "<title>Reporte de Donantes por Cobrador</title>" +
+                    "<style>" +
+                        "body { font-family: Arial, sans-serif; font-size: 12px; margin: 0; padding: 0; }" +
+                        ".header { font-family: Times, serif; text-align: left; font-size: 14px; font-weight: bold; margin-bottom: 20px; }" +
+                        ".donantes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0px; }" +
+                        ".donante-title { text-align: center; font-weight: bold; font-size: 10px; margin-bottom: 0px; }" +
+                        ".donante-card { border: 1px dotted black; padding: 10px; font-size: 8px; page-break-inside: avoid; break-inside: avoid; }" +
+                        ".donante-info { margin-bottom: 5px;}" +
+                        "table { width: 100%; font-size: 8px; border-collapse: collapse;}" +
+                        "tr { margin: 0; }" + // Reducido margin
+                        "td.label { text-align: left; width: 30%; }" + // Ajuste de ancho
+                        "td.value { width: 70%; font-weight: bold; }" + // Ajuste de ancho
+                        "strong { font-family: 'Courier New', Courier, monospace; }" +
+                        "@media print {" +
+                            "@page { margin: 2cm; }" +
+                            "body { margin: 0; padding: 0; }" +
+                            ".header { position: relative; page-break-after: avoid; }" +
+                            ".donantes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }" +  // Ajuste en impresión
+                            ".donante-card { page-break-inside: avoid; break-inside: avoid; }" +  // Evita cortes
+                        "}" +
+                    "</style>" +
+                "</head>" +
+                "<body>" +
+                "<div class='header'>FUNDACION SANTAFESINA VIRGEN DE LUJAN -- Reporte de donantes por cobrador</div>" +
+                $"<div class='header'>Zona: {zona}</div>"
+            );
+
+            foreach (var entry in donantesPorCobrador)
+            {
+                html.Append($"<h3>Cobrador: {entry.Key}</h3>");
+                html.Append("<div class='donantes-grid'>"); // Inicia la grilla
+
+                foreach (var donante in entry.Value)
+                {
+                    var cobradorNombre = donante.IdCobradorNavigation?.CodigoNombre ?? "N/A";
+                    html.Append(
+                        "<div class='donante-card'>" +
+                            $"<div class='donante-title'>FUNDACION SANTAFESINA VIRGEN DE LUJAN</div>" + // Título añadido
+                            $"<div style='text-align: center; margin-bottom: 10px; font-size: 8px'>Para enfermos Oncológicos sin recursos</div>" +
+                            "<table>" +
+                                $"<tr><td class='label'>Dte. Volunt:</td><td class='value'><strong>{donante.Id} {donante.NombreApellido}</strong></td></tr>" +
+                                $"<tr><td class='label'>Domicilio:</td><td class='value'><strong>{donante.Domicilio}</strong></td></tr>" +
+                                $"<tr><td class='label'>Localidad:</td><td class='value'><strong>{donante.Ciudad}</strong></td></tr>" +
+                                $"<tr><td class='label'>F.Ingreso:</td><td class='value'><strong>{donante.FechaIngreso?.ToString("dd/MM/yyyy")}</strong></td></tr>" +
+                                $"<tr><td class='label'>Periodo:</td><td class='value'><strong>{DateTime.Now:MM/yyyy}</strong></td></tr>" +
+                                $"<tr><td class='label'>Importe:</td><td class='value'><strong>${donante.Monto}</strong></td></tr>" +
+                                $"<tr><td class='label'>Cobrador:</td><td class='value'><strong>{cobradorNombre}</strong></td></tr>" +
+                            "</table>" +
+                        "</div>"
+                    );
+                }
+
+                html.Append("</div>"); // Cierra la grilla
+            }
+
+            html.Append(
+                "</body>" +
+                "</html>");
+
+            return html.ToString();
+        }
+
+
+
+
 
     }
 }
