@@ -20,8 +20,8 @@ namespace AppFundacion
         {
             var window = base.CreateWindow(activationState);
 
-            const int newWidth = 1847;
-            const int newHeight = 943;
+            const int newWidth = 1360;
+            const int newHeight = 768;
 
             window.Width = newWidth;
             window.Height = newHeight;

@@ -22,7 +22,7 @@ public partial class DonantesView : UraniumContentPage
             await Task.Run(async () =>
             {
                 if (ViewModel is not null)
-                    await ViewModel.CargarListasAsync();
+                    await ViewModel.CargarListasAsync(true);
             });
         }
         catch (Exception ex)

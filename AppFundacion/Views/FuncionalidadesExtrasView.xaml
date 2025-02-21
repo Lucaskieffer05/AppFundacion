@@ -14,138 +14,121 @@
         <viewModels:FuncionalidadesExtrasViewModel/>
     </uranium:UraniumContentPage.BindingContext>
 
-    <ScrollView>
-        <Grid Padding="20" Margin="20,0,0,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+    <Grid RowDefinitions="*,Auto" ColumnDefinitions="*">
+        <Grid ColumnDefinitions="*,*" Grid.Row="0">
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="700"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-
-            <Grid Grid.Row="0" Grid.Column="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <VerticalStackLayout Grid.Row="0" >
-
-                    <HorizontalStackLayout Padding="20">
-                        <material:DropdownField Title="Cobrador" ItemsSource="{Binding ListaCobradores, Mode=TwoWay}"
-                                        MinimumWidthRequest="130"
+            <Grid RowDefinitions="Auto,Auto,*" Grid.Column="0">
+                
+                <HorizontalStackLayout Padding="20" Spacing="10" Grid.Row="0">
+                    <material:DropdownField Title="Cobrador" ItemsSource="{Binding ListaCobradores, Mode=TwoWay}"
                                         SelectedItem="{Binding CobradorSeleccionado, Mode=TwoWay}"
-                                        Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.CircleChevronDown}}"/>
-                        <material:DropdownField Title="Elige una zona"
-                                        Margin="10,0,0,0"
-                                        MinimumWidthRequest="160"
+                                        Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.CircleChevronDown}}"
+                                            MaximumWidthRequest="150"/>
+                    <material:DropdownField Title="Elige una zona"
                                         ItemsSource="{Binding ListaZonas}"
                                         SelectedItem="{Binding ZonaSeleccionada, Mode=TwoWay}"
                                         Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.CircleChevronDown}}"/>
-                        <material:TextField Title="Buscar" WidthRequest="230" Margin="10,0,10,0" AllowClear="True" 
-                                    Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.User}}"
-                                    Text="{Binding TextoBusqueda, Mode=TwoWay}"
-                                    TextChanged="OnTextChanged"/>
-                    </HorizontalStackLayout>
+                    <material:TextField Title="Buscar" AllowClear="True" 
+                                        Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.User}}"
+                                        Text="{Binding TextoBusqueda, Mode=TwoWay}"
+                                        TextChanged="OnTextChanged"
+                                        MinimumWidthRequest="150"/>
+                </HorizontalStackLayout>
 
-                    <HorizontalStackLayout VerticalOptions="Center" HeightRequest="40">
-                        <Label Text="Cantidad de Donantes seleccionados:" VerticalOptions="Center" Margin="10"/>
-                        <Label Text="{Binding CantidadDonantes}" TextColor="#32a83c" FontSize="Medium" VerticalOptions="Center" FontAttributes="Bold"/>
-                    </HorizontalStackLayout>
-                    
-                    <Border Stroke="Silver" StrokeThickness="3" Grid.Row="1" >
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="10"/>
-                        </Border.StrokeShape>
-                        <dg:DataGrid ItemsSource="{Binding ListaDonantes}"           
-                                     IsRefreshing="{Binding IsBusy}" 
-                                     PaginationEnabled="True"
-                                     PageSize="15"
-                                     RowHeight="40" HeaderHeight="40"
-                                     BorderColor="Transparent"
-                                     HeaderBordersVisible="False"
-                                     BackgroundColor="White"
-                                     CascadeInputTransparent="True"
-                                     SelectionMode="None">
-                            <dg:DataGrid.Columns>
-                                <dg:DataGridColumn Title="Codigo"  PropertyName="Id" />
-                                <dg:DataGridColumn Title="DNI" PropertyName="Dni" />
-                                <dg:DataGridColumn Title="Nombre y Aplleido" PropertyName="NombreApellido" />
-                                <dg:DataGridColumn Title="Ciudad" PropertyName="Ciudad" />
-                                <dg:DataGridColumn Title="Monto" PropertyName="Monto" />
-                                <dg:DataGridColumn Title="Cobrador" >
-                                    <dg:DataGridColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Label Text="{Binding IdCobradorNavigation.CodigoNombre}" 
-                                                   HorizontalOptions="Center" VerticalOptions="Center"/>
-                                        </DataTemplate>
-                                    </dg:DataGridColumn.CellTemplate>
-                                </dg:DataGridColumn>
-                            </dg:DataGrid.Columns>
-                            <dg:DataGrid.Resources>
-                                <ResourceDictionary>
-                                    <Style TargetType="dg:DataGrid" >
-                                        <Setter Property="PaginationStepperStyle">
-                                            <Setter.Value>
-                                                <Style TargetType="Stepper">
-                                                    <Setter Property="BackgroundColor" Value="#b5ffce"/>
-                                                </Style>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                </ResourceDictionary>
-                            </dg:DataGrid.Resources>
-                        </dg:DataGrid>
-                    </Border>
-                </VerticalStackLayout>
+                <HorizontalStackLayout VerticalOptions="Center" Grid.Row="1" HorizontalOptions="Center">
+                    <Label Text="Cantidad de Donantes seleccionados:" VerticalOptions="Center" Margin="10" FontAttributes="Bold"/>
+                    <Label Text="{Binding CantidadDonantes}" TextColor="#32a83c" FontSize="Medium" VerticalOptions="Center" FontAttributes="Bold"/>
+                </HorizontalStackLayout>
+
+                <Border Stroke="Silver" StrokeThickness="3" Grid.Row="2" >
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10"/>
+                    </Border.StrokeShape>
+                    <dg:DataGrid ItemsSource="{Binding ListaDonantes}"           
+                                IsRefreshing="{Binding IsBusy}" 
+                                PaginationEnabled="True"
+                                PageSize="15"
+                                RowHeight="43" HeaderHeight="40"
+                                BorderColor="Transparent"
+                                HeaderBordersVisible="False"
+                                BackgroundColor="White"
+                                CascadeInputTransparent="True"
+                                SelectionMode="None">
+                        <dg:DataGrid.Columns >
+                            <dg:DataGridColumn Title="Codigo"  PropertyName="Id" Width="50" />
+                            <dg:DataGridColumn Title="DNI" PropertyName="Dni" Width="*"/>
+                            <dg:DataGridColumn Title="Nombre y Aplleido" PropertyName="NombreApellido" Width="*"/>
+                            <dg:DataGridColumn Title="Ciudad" PropertyName="Ciudad" Width="*"/>
+                            <dg:DataGridColumn Title="Monto" PropertyName="Monto" Width="*"/>
+                            <dg:DataGridColumn Title="Cobrador" Width="*">
+                                <dg:DataGridColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label Text="{Binding IdCobradorNavigation.CodigoNombre}" 
+                                                    HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    </DataTemplate>
+                                </dg:DataGridColumn.CellTemplate>
+                            </dg:DataGridColumn>
+                        </dg:DataGrid.Columns>
+                        <dg:DataGrid.Resources>
+                            <ResourceDictionary>
+                                <Style TargetType="dg:DataGrid" >
+                                    <Setter Property="PaginationStepperStyle">
+                                        <Setter.Value>
+                                            <Style TargetType="Stepper">
+                                                <Setter Property="BackgroundColor" Value="#b5ffce"/>
+                                            </Style>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ResourceDictionary>
+                        </dg:DataGrid.Resources>
+                    </dg:DataGrid>
+                </Border>
+
             </Grid>
 
-            <VerticalStackLayout Grid.Column="1" Margin="40,150,0,0">
-                <Border Stroke="Silver" StrokeThickness="3" Padding="10" Margin="20">
+            <Grid RowDefinitions="*,*" Grid.Column="1" Padding="10" RowSpacing="20">
+                <Border Stroke="Silver" StrokeThickness="3" Grid.Row="0" Padding="10" VerticalOptions="End" HorizontalOptions="Center">
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="10"/>
                     </Border.StrokeShape>
-                    <HorizontalStackLayout Padding="20" WidthRequest="630">
-                        <Label Margin="0,0,20,0" Text="Asignar estos donantes al cobrador:" TextColor="Black" FontSize="Body" FontAttributes="Italic" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="8">
+                        <Label HorizontalTextAlignment="Center"  Text="Asignar estos donantes al cobrador:" TextColor="Black" FontSize="Body" FontAttributes="Italic" HorizontalOptions="Center" VerticalOptions="Center"/>
                         <material:DropdownField Title="Cobrador"
-                                                Margin="0,0,20,0"
                                                 ItemsSource="{Binding ListaCobradoresOrigen}"
-                                                MinimumWidthRequest="130"
                                                 SelectedItem="{Binding CobradorSeleccionadoDestino, Mode=TwoWay}"
-                                                Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.ArrowsDownToPeople}}"/>
-                        <Button StyleClass="FilledButton" Text="Asignar" Command="{Binding AsignarDonantesACobradorCommand}" Margin="0,0,20,0"/>
+                                                Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.ArrowsDownToPeople}}"
+                                                MinimumWidthRequest="120"
+                                                MaximumWidthRequest="140"/>
+                        <Button StyleClass="FilledButton" Text="Asignar" Command="{Binding AsignarDonantesACobradorCommand}"/>
                     </HorizontalStackLayout>
                 </Border>
-                <Border Stroke="Silver" StrokeThickness="3" Padding="10" Margin="20">
+                <Border Stroke="Silver" StrokeThickness="3" Grid.Row="1" VerticalOptions="Start" HorizontalOptions="Center" Padding="15">
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="10"/>
                     </Border.StrokeShape>
-                    <VerticalStackLayout Padding="20">
+                    <VerticalStackLayout >
                         <Label Text="Modificar monto de los donantes:" TextColor="Black" FontSize="Body" FontAttributes="Italic" HorizontalOptions="Center" VerticalOptions="Center"/>
-                        <HorizontalStackLayout Margin="20">
-                            <material:TextField Title="Reemplar monto" 
-                                                WidthRequest="230" 
-                                                Margin="10,0,10,0" 
+                        <HorizontalStackLayout Spacing="10">
+                            <material:TextField Title="Reemplar monto"
                                                 AllowClear="True" 
                                                 Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.DollarSign}}"
-                                                Text="{Binding ViejoMonto, Mode=TwoWay}"/>
+                                                Text="{Binding ViejoMonto, Mode=TwoWay}"
+                                                MinimumWidthRequest="150"
+                                                MaximumWidthRequest="150"/>
 
                             <Image WidthRequest="24" HeightRequest="24">
                                 <Image.Source>
                                     <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.ArrowRightLong}" Size="24" Color="Black"/>
                                 </Image.Source>
                             </Image>
-                            
-                            <material:TextField Title="Nuevo monto" 
-                                                WidthRequest="230" 
-                                                Margin="10,0,10,0" 
+
+                            <material:TextField Title="Nuevo monto"
                                                 AllowClear="True" 
                                                 Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.DollarSign}}"
-                                                Text="{Binding NuevoMonto, Mode=TwoWay}"/>
+                                                Text="{Binding NuevoMonto, Mode=TwoWay}"
+                                                MinimumWidthRequest="130"
+                                                MaximumWidthRequest="130"/>
 
 
                         </HorizontalStackLayout>
@@ -153,10 +136,11 @@
                         <Button WidthRequest="200" StyleClass="FilledButton" Text="Actualizar Monto" Command="{Binding ActualizarMontoDonantesCommand}" Margin="0,0,20,0"/>
                     </VerticalStackLayout>
                 </Border>
-            </VerticalStackLayout>
-            
-            
+            </Grid>
+
         </Grid>
-    </ScrollView>
-    
+        
+        <Grid RowDefinitions="Auto" HeightRequest="50" Grid.Row="1"/>
+    </Grid>
+
 </uranium:UraniumContentPage>

@@ -214,7 +214,7 @@ namespace AppFundacion.ViewModels
                             "@page { margin: 2cm; }" +
                             "body { margin: 0; padding: 0; }" +
                             ".header { position: relative; page-break-after: avoid; }" +
-                            "thead th { background-color: #d3d3d3 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }" + // Refuerzo del color
+                            "thead th { background-color: #d3d3d3 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }" +
                         "}" +
                     "</style>" +
                 "</head>" +

@@ -36,7 +36,7 @@
             Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.FileLines}, Color=Black}"/>
 
         <ShellContent
-            Title="Operaciones adicionales"
+            Title="Operaciones en Conjunto"
             ContentTemplate="{DataTemplate local:FuncionalidadesExtrasView}"
             Route="FuncionalidadesExtrasView"
             Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Briefcase}, Color=Black}"/>
@@ -45,7 +45,13 @@
             Title="Gestion Cobradores"
             ContentTemplate="{DataTemplate local:CobradorAgregarView}"
             Route="CobradorAgregarView"
-            Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Gear}, Color=Black}"/> 
+            Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Gear}, Color=Black}"/>
+
+        <ShellContent
+            Title="Gestion Zonas"
+            ContentTemplate="{DataTemplate local:ZonaAgregarView}"
+            Route="ZonaAgregarView"
+            Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Gear}, Color=Black}"/>
 
     </FlyoutItem>
 

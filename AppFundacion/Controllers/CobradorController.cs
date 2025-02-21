@@ -132,6 +132,22 @@ namespace AppFundacion.Controllers
             }
         }
 
+        // Actualizar cobrador
+        public async Task<bool> UpdateCobrador(Cobrador cobrador)
+        {
+            try
+            {
+                _context.Entry(cobrador).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
 
     }
 }

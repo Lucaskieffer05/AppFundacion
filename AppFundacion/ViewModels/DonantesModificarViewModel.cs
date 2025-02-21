@@ -62,6 +62,10 @@ namespace AppFundacion.ViewModels
                 await Shell.Current.DisplayAlert("Error", "Ocurrió un error al modificar el donante", "OK");
                 return;
             }
+            if (DonanteModificar.IdCobrador != DonanteModificar.IdCobradorNavigation.Id)
+            {
+                DonanteModificar.IdCobrador = DonanteModificar.IdCobradorNavigation.Id;
+            }
             var resultado = await _donanteController.UpdateDonante(DonanteModificar);
             if (resultado)
             {

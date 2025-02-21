@@ -10,6 +10,7 @@ namespace AppFundacion
 
             Routing.RegisterRoute(nameof(DonanteModificarView), typeof(DonanteModificarView));
             Routing.RegisterRoute(nameof(DonanteAgregarView), typeof(DonanteAgregarView));
+            Routing.RegisterRoute(nameof(CobradorModificarView), typeof(CobradorModificarView));
 
         }
 

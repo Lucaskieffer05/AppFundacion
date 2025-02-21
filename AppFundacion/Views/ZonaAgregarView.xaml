@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<uranium:UraniumContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppFundacion.Views.ZonaAgregarView"
+             Title="Gestion de cobradores"
+             xmlns:viewModels="clr-namespace:AppFundacion.ViewModels"
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+             xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+             xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
+             xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome">
+
+
+    <uranium:UraniumContentPage.BindingContext>
+        <viewModels:ZonaAgregarViewModel/>
+    </uranium:UraniumContentPage.BindingContext>
+
+
+    <ScrollView>
+        <Grid RowDefinitions="Auto,Auto">
+
+            <Grid Padding="20" ColumnSpacing="20" ColumnDefinitions="0.8*,*,0.5*">
+                
+                <Border Grid.Row="0" Stroke="Silver" StrokeThickness="3" Padding="10">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10"/>
+                    </Border.StrokeShape>
+
+                    <HorizontalStackLayout Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center" Spacing="20">
+                        <material:TextField Title="Nombre"  
+                                            AllowClear="True" 
+                                            Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.User}}"
+                                            Text="{Binding ZonaAgregar.Nombre, Mode=TwoWay}"
+                                            MaximumWidthRequest="200"
+                                            MinimumWidthRequest="120"/>
+                        <Button Grid.Column="1" StyleClass="FilledButton" Text="Agregar Zona" Command="{Binding AgregarZonaCommand}"/>
+                    </HorizontalStackLayout>
+
+                </Border>
+
+                <Border Grid.Row="0" Grid.Column="1" Stroke="Silver" StrokeThickness="3" Padding="10">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10"/>
+                    </Border.StrokeShape>
+                    <HorizontalStackLayout Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center" Spacing="20">
+                        <material:TextField Title="Nombre" 
+                                            AllowClear="True" 
+                                            Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.User}}"
+                                            Text="{Binding ZonaSeleccionado.Nombre, Mode=TwoWay}"
+                                            MaximumWidthRequest="200"
+                                            MinimumWidthRequest="120"/>
+                        <Button StyleClass="OutlinedButton" Text="Cambiar nombre" Command="{Binding ModificarZonaCommand}" TextColor="#32b33b" Margin="0,0,20,0"/>
+                    </HorizontalStackLayout>
+                </Border>
+
+                <Button Grid.Column="2" StyleClass="OutlinedButton" Text="Eliminar Zona" TextColor="{StaticResource Error}" Command="{Binding EliminarZonaCommand}" />
+                
+            </Grid>
+            <Grid Grid.Row="1" ColumnDefinitions="0.5*,*,0.5*">
+                <Border Stroke="Silver" StrokeThickness="3" Grid.Column="1">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10"/>
+                    </Border.StrokeShape>
+                    <dg:DataGrid ItemsSource="{Binding ListaZonas}" 
+                                 Style="{StaticResource TablaComun}"             
+                                 IsRefreshing="{Binding IsBusy}" 
+                                 PaginationEnabled="True" 
+                                 PageSize="20" 
+                                 PageNumber="1"
+                                 SelectionMode="Single" 
+                                 SelectedItem="{Binding ZonaSeleccionado}"
+                                 BorderColor="Transparent">
+                        <dg:DataGrid.Columns>
+                            <dg:DataGridColumn Title="Nombre" PropertyName="Nombre"/>
+                        </dg:DataGrid.Columns>
+                    </dg:DataGrid>
+                </Border>
+            </Grid>
+        </Grid>
+    </ScrollView>
+</uranium:UraniumContentPage>

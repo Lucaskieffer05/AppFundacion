@@ -65,7 +65,7 @@ namespace AppFundacion.ViewModels
             {
                 if (m.Value) { 
                     await CargarListasAsync();
-                    FiltrarDonantes();
+                    FiltrarCobradorZona();
                 }
             });
 
@@ -74,7 +74,7 @@ namespace AppFundacion.ViewModels
                 if (m.Value)
                 {
                     await CargarListasAsync();
-                    FiltrarDonantes();
+                    FiltrarCobradorZona();
                 }
             });
 
@@ -140,7 +140,7 @@ namespace AppFundacion.ViewModels
                 {
                     await Shell.Current.DisplayAlert("Donante Eliminado", "El donante ha sido eliminado correctamente.", "OK");
                     await CargarListasAsync();
-                    FiltrarDonantes();
+                    FiltrarCobradorZona();
                 }
                 else
                 {
@@ -155,7 +155,7 @@ namespace AppFundacion.ViewModels
             _donanteController = new DonanteController(new FundacionContext());
             _cobradorController = new CobradorController(new FundacionContext());
             _zonaController = new ZonaController(new FundacionContext());
-            await CargarListasAsync();
+            await CargarListasAsync(true);
             FiltrarDonantes();
         }
 
@@ -202,7 +202,6 @@ namespace AppFundacion.ViewModels
                 };
 
                 await Shell.Current.GoToAsync(nameof(DonanteModificarView), parametroNavigation);
-                Debug.WriteLine("dasd");
             }
             else
             {
@@ -218,22 +217,26 @@ namespace AppFundacion.ViewModels
 
 
 
-        public async Task CargarListasAsync()
+        public async Task CargarListasAsync(bool actualizarTodo = false)
         {
             IsBusy = true;
+
             var donantesList = await _donanteController.GetAllDonantes();
             _todosLosDonantes = donantesList;
             ListaDonantes = new ObservableCollection<Donante>(donantesList);
 
-            CobradorSeleccionado = new Cobrador { Id = -1, Codigo = -1, Nombre = "Ninguno" };
-            var cobradorList = await _cobradorController.GetAllCobradores();
-            cobradorList.Insert(0, CobradorSeleccionado);
-            ListaCobradores = new ObservableCollection<Cobrador>(cobradorList);
+            if (actualizarTodo)
+            {
+                CobradorSeleccionado = new Cobrador { Id = -1, Codigo = -1, Nombre = "Ninguno" };
+                var cobradorList = await _cobradorController.GetAllCobradores();
+                cobradorList.Insert(0, CobradorSeleccionado);
+                ListaCobradores = new ObservableCollection<Cobrador>(cobradorList);
 
-            ZonaSeleccionada = new Zona { Id = -1, Nombre = "Ninguna" };
-            var zonaList = await _zonaController.GetAllZonas();
-            zonaList.Insert(0, ZonaSeleccionada);
-            ListaZonas = new ObservableCollection<Zona>(zonaList);
+                ZonaSeleccionada = new Zona { Id = -1, Nombre = "Ninguna" };
+                var zonaList = await _zonaController.GetAllZonas();
+                zonaList.Insert(0, ZonaSeleccionada);
+                ListaZonas = new ObservableCollection<Zona>(zonaList);
+            }
 
             IsBusy = false;
         }

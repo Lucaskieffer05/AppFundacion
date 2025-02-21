@@ -78,6 +78,11 @@ namespace AppFundacion
             builder.Services.AddTransient<HomeView>();
             builder.Services.AddTransient<HomeViewModel>();
 
+            builder.Services.AddTransient<CobradorModificarView>();
+            builder.Services.AddTransient<CobradorModificarViewModel>();
+
+            builder.Services.AddTransient<ZonaAgregarView>();
+            builder.Services.AddTransient<ZonaAgregarViewModel>();
 
 #if DEBUG
             builder.Logging.AddDebug();

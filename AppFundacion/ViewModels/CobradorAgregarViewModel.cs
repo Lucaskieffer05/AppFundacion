@@ -4,6 +4,9 @@ using AppFundacion.Controllers;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Diagnostics;
+using AppFundacion.Views;
+using AppFundacion.Mensajes;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace AppFundacion.ViewModels
 {
@@ -42,6 +45,15 @@ namespace AppFundacion.ViewModels
         {
             _cobradorController = new CobradorController(new FundacionContext());
             _zonaController = new ZonaController(new FundacionContext());
+
+            WeakReferenceMessenger.Default.Register<CobradorModificarMessage>(this, async (r, m) =>
+            {
+                if (m.Value)
+                {
+                    await CargarListasAsync();
+                }
+            });
+
         }
 
 
@@ -95,6 +107,24 @@ namespace AppFundacion.ViewModels
                 return;
             }
 
+        }
+
+        [RelayCommand]
+        public async Task ModificarCobrador()
+        {
+            if (CobradorSeleccionado != null)
+            {
+                var parametroNavigation = new Dictionary<string, object>
+                {
+                    {"cobradorModificar",this.CobradorSeleccionado}
+                };
+
+                await Shell.Current.GoToAsync(nameof(CobradorModificarView), parametroNavigation);
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert("Error!", "No se ha seleccionado ningun cobrador.", "OK");
+            }
         }
 
         [RelayCommand]

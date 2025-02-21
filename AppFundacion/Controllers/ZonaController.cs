@@ -54,5 +54,74 @@ namespace AppFundacion.Controllers
            
         }
 
+        // Agregar Zona
+        public async Task<bool> AddZona(Zona zona)
+        {
+            try
+            {
+                _context.Zonas.Add(zona);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        // Eliminar Zona
+        public async Task<bool> DeleteZona(Zona zona)
+        {
+            try
+            {
+                _context.Zonas.Remove(zona);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        // Modificar zona
+        public async Task<bool> UpdateZona(Zona zona)
+        {
+            try
+            {
+                _context.Zonas.Update(zona);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        // Verificar si se puede eliminar una zona
+        public bool VerificarEliminarZona(int id)
+        {
+            try
+            {
+                var zona = _context.Zonas
+                    .Include(z => z.Cobradores)
+                    .FirstOrDefault(z => z.Id == id);
+                if (zona == null || zona.Cobradores.Count > 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
     }
 }
