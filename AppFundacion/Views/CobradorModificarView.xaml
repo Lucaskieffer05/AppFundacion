@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <uranium:UraniumContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AppFundacion.Views.CobradorModificarView"
-             Title="Modificar cobrador"
-             xmlns:viewModels="clr-namespace:AppFundacion.ViewModels"
-             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
-             xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
-             xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
-             xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome">
+                            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                            x:Class="AppFundacion.Views.CobradorModificarView"
+                            Title="Modificar cobrador"
+                            xmlns:viewModels="clr-namespace:AppFundacion.ViewModels"
+                            xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+                            xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+                            xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
+                            xmlns:validations="clr-namespace:AppFundacion.Validations"
+                            xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome">
 
 
     <uranium:UraniumContentPage.BindingContext>
@@ -19,7 +20,9 @@
         <VerticalStackLayout Padding="20" Spacing="15">
 
             <material:TextField Title="Codigo" Text="{Binding CobradorModificar.Codigo}" />
-            <material:TextField Title="Nombre y Apellido" Text="{Binding CobradorModificar.Nombre}" />
+            <material:TextField Title="Nombre y Apellido" Text="{Binding CobradorModificar.Nombre}">
+                <validations:NombreApellidoValidation />
+            </material:TextField>
 
             <material:DropdownField Title="Cobrador" ItemsSource="{Binding ListaZonas}" 
                                 SelectedItem="{Binding CobradorModificar.IdZonaNavigation, Mode=TwoWay}">

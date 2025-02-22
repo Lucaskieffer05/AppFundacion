@@ -25,7 +25,7 @@
             <StackLayout Padding="20" Spacing="10">
                 <!-- Bienvenida y Descripción -->
                 <Label Text="Bienvenido a la Fundación Santafesina Virgen de Luján"
-                       FontSize="40"
+                       FontSize="37"
                        TextColor="#f5f4e6"
                        FontFamily="Raleway-Regular"
                        FontAttributes="Bold"

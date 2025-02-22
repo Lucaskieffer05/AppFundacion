@@ -57,6 +57,19 @@ namespace AppFundacion.ViewModels
         [RelayCommand]
         async Task ModficiarDonador()
         {
+            if (DonanteModificar== null || DonanteModificar.NombreApellido == null || DonanteModificar.NombreApellido == "")
+            {
+                await Shell.Current.DisplayAlert("Error", "Debes seleccionar un nombre adecuado", "OK");
+                return;
+            }
+
+            if (DonanteModificar.Monto <= 0)
+            {
+                await Shell.Current.DisplayAlert("Error", "Debes ingresar un monto adecuado", "OK");
+                return;
+            }
+
+
             if (DonanteModificar == null || DonanteModificar.IdCobradorNavigation == null)
             {
                 await Shell.Current.DisplayAlert("Error", "Ocurrió un error al modificar el donante", "OK");

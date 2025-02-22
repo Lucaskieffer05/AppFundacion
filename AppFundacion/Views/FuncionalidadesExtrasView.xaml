@@ -40,7 +40,7 @@
                     <Label Text="{Binding CantidadDonantes}" TextColor="#32a83c" FontSize="Medium" VerticalOptions="Center" FontAttributes="Bold"/>
                 </HorizontalStackLayout>
 
-                <Border Stroke="Silver" StrokeThickness="3" Grid.Row="2" >
+                <Border Stroke="Silver" StrokeThickness="3" Grid.Row="2">
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="10"/>
                     </Border.StrokeShape>

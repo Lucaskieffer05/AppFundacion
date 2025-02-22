@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <uranium:UraniumContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AppFundacion.Views.DonanteModificarView"
-             xmlns:viewModels="clr-namespace:AppFundacion.ViewModels"
-             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
-             xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
-             xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
-             Title="Modificar Donante">
+                            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                            x:Class="AppFundacion.Views.DonanteModificarView"
+                            xmlns:viewModels="clr-namespace:AppFundacion.ViewModels"
+                            xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+                            xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+                            xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+                            xmlns:validations="clr-namespace:AppFundacion.Validations"
+                            Title="Modificar Donante">
 
     <uranium:UraniumContentPage.BindingContext>
         <viewModels:DonantesModificarViewModel/>
@@ -16,7 +17,9 @@
         <VerticalStackLayout Padding="20" Spacing="15">
 
             <material:TextField Title="DNI" Text="{Binding DonanteModificar.Dni}" />
-            <material:TextField Title="Nombre y Apellido" Text="{Binding DonanteModificar.NombreApellido}" />
+            <material:TextField Title="Nombre y Apellido" Text="{Binding DonanteModificar.NombreApellido}">
+                <validations:NombreApellidoValidation />
+            </material:TextField>
             <material:TextField Title="Domicilio" Text="{Binding DonanteModificar.Domicilio}" />
             <material:TextField Title="Ciudad" Text="{Binding DonanteModificar.Ciudad}" />
             <material:TextField Title="Provincia" Text="{Binding DonanteModificar.Provincia}" />
@@ -25,7 +28,9 @@
             <material:DatePickerField Title="Fecha de Ingreso" Date="{Binding DonanteModificar.FechaIngreso}" 
                                       Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Calendar}}"/>
 
-            <material:TextField Title="Monto" Text="{Binding DonanteModificar.Monto}" Keyboard="Numeric" />
+            <material:TextField Title="Monto" Text="{Binding DonanteModificar.Monto}" Keyboard="Numeric">
+                <validations:MontoValidation/>
+            </material:TextField>
 
             <material:DropdownField Title="Cobrador" ItemsSource="{Binding ListaCobradores}" 
                                     SelectedItem="{Binding DonanteModificar.IdCobradorNavigation, Mode=TwoWay}">
