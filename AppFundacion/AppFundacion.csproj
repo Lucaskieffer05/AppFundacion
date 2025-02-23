@@ -37,6 +37,15 @@
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<GenerateAppInstallerFile>False</GenerateAppInstallerFile>
+		<AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
+		<PackageCertificateThumbprint>E2768BE0585A032D2D829F77C805E2D69E73BD2C</PackageCertificateThumbprint>
+		<AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+		<AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+		<AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
+		<GenerateTestArtifacts>True</GenerateTestArtifacts>
+		<HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
+		<DefaultLanguage>es</DefaultLanguage>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -118,6 +127,52 @@
 
 	<ItemGroup>
 	  <Compile Remove="C:\Users\Kieff\.nuget\packages\microsoft.windowsappsdk\1.5.240802000\buildTransitive\..\include\WindowsAppSDK-VersionInfo.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="apreton.scale-100.png" />
+	  <None Remove="apreton.scale-125.png" />
+	  <None Remove="apreton.scale-150.png" />
+	  <None Remove="apreton.scale-200.png" />
+	  <None Remove="apreton.scale-400.png" />
+	  <None Remove="apreton.targetsize-16.png" />
+	  <None Remove="apreton.targetsize-16_altform-lightunplated.png" />
+	  <None Remove="apreton.targetsize-16_altform-unplated.png" />
+	  <None Remove="apreton.targetsize-24.png" />
+	  <None Remove="apreton.targetsize-24_altform-lightunplated.png" />
+	  <None Remove="apreton.targetsize-24_altform-unplated.png" />
+	  <None Remove="apreton.targetsize-256.png" />
+	  <None Remove="apreton.targetsize-256_altform-lightunplated.png" />
+	  <None Remove="apreton.targetsize-256_altform-unplated.png" />
+	  <None Remove="apreton.targetsize-32.png" />
+	  <None Remove="apreton.targetsize-32_altform-lightunplated.png" />
+	  <None Remove="apreton.targetsize-32_altform-unplated.png" />
+	  <None Remove="apreton.targetsize-48.png" />
+	  <None Remove="apreton.targetsize-48_altform-lightunplated.png" />
+	  <None Remove="apreton.targetsize-48_altform-unplated.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="apreton.scale-100.png" />
+	  <Content Include="apreton.scale-125.png" />
+	  <Content Include="apreton.scale-150.png" />
+	  <Content Include="apreton.scale-200.png" />
+	  <Content Include="apreton.scale-400.png" />
+	  <Content Include="apreton.targetsize-16.png" />
+	  <Content Include="apreton.targetsize-16_altform-lightunplated.png" />
+	  <Content Include="apreton.targetsize-16_altform-unplated.png" />
+	  <Content Include="apreton.targetsize-24.png" />
+	  <Content Include="apreton.targetsize-24_altform-lightunplated.png" />
+	  <Content Include="apreton.targetsize-24_altform-unplated.png" />
+	  <Content Include="apreton.targetsize-256.png" />
+	  <Content Include="apreton.targetsize-256_altform-lightunplated.png" />
+	  <Content Include="apreton.targetsize-256_altform-unplated.png" />
+	  <Content Include="apreton.targetsize-32.png" />
+	  <Content Include="apreton.targetsize-32_altform-lightunplated.png" />
+	  <Content Include="apreton.targetsize-32_altform-unplated.png" />
+	  <Content Include="apreton.targetsize-48.png" />
+	  <Content Include="apreton.targetsize-48_altform-lightunplated.png" />
+	  <Content Include="apreton.targetsize-48_altform-unplated.png" />
 	</ItemGroup>
 
 	<ItemGroup>

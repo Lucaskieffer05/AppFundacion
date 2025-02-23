@@ -8,7 +8,7 @@
     xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
     Shell.FlyoutBehavior="Locked"
     Shell.TabBarIsVisible="False"
-    Title="AppFundacion"
+    Title="Aplicación Fundación"
     Style="{StaticResource FlyoutGradientBackground}">
 
     <Shell.FlyoutHeader>
