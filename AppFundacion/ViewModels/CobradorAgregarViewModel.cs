@@ -94,7 +94,7 @@ namespace AppFundacion.ViewModels
                 CobradorAgregar.IdZonaNavigation = null;
 
                 var resultado = await _cobradorController.AddCobrador(CobradorAgregar);
-                string mensaje = resultado ? "El donante fue agregado con éxito" : "Ocurrió un error al agregar el donante";
+                string mensaje = resultado ? "El donante fue agregado con éxito. Recuerda actualizar la tabla del menú 'Donantes'." : "Ocurrió un error al agregar el donante";
 
                 await Shell.Current.DisplayAlert(resultado ? "Tarea Exitosa" : "Error", mensaje, "OK");
                 await CargarListasAsync();
@@ -149,7 +149,7 @@ namespace AppFundacion.ViewModels
 
                 if (resultado)
                 {
-                    await Shell.Current.DisplayAlert("Cobrador Eliminado", "El cobrador ha sido eliminado correctamente.", "OK");
+                    await Shell.Current.DisplayAlert("Cobrador Eliminado. Recuerda actualizar la tabla del menú 'Donantes'.", "El cobrador ha sido eliminado correctamente.", "OK");
                     await CargarListasAsync();
                 }
                 else

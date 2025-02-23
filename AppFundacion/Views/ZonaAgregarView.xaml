@@ -30,7 +30,7 @@
                                             AllowClear="True" 
                                             Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.User}}"
                                             Text="{Binding ZonaAgregar.Nombre, Mode=TwoWay}"
-                                            MaximumWidthRequest="200"
+                                            MaximumWidthRequest="150"
                                             MinimumWidthRequest="120"/>
                         <Button Grid.Column="1" StyleClass="FilledButton" Text="Agregar Zona" Command="{Binding AgregarZonaCommand}"/>
                     </HorizontalStackLayout>

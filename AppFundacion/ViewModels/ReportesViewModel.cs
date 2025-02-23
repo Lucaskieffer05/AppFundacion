@@ -7,6 +7,7 @@ using AppFundacion.Controllers;
 using System.Text;
 using System.Diagnostics;
 using Microsoft.Extensions.Primitives;
+using DocumentFormat.OpenXml.Drawing.Charts;
 
 namespace AppFundacion.ViewModels
 {
@@ -46,6 +47,13 @@ namespace AppFundacion.ViewModels
         [ObservableProperty]
         private Zona? zonaSeleccionadaTarjeta = null;
 
+        [ObservableProperty]
+        private int mesPerido;
+
+        [ObservableProperty]
+        private int añoPerido;
+
+
 
 
         // -------------------------------------------------------------------
@@ -62,7 +70,8 @@ namespace AppFundacion.ViewModels
             OpcionSeleccionadaTarjeta = 0;
             VisibleDropdown = false;
             VisibleDropdownTarjeta = false;
-
+            MesPerido = DateTime.Now.Month;
+            AñoPerido = DateTime.Now.Year;
         }
 
         // Método que se ejecuta cuando cambia OpcionSeleccionada
@@ -117,7 +126,7 @@ namespace AppFundacion.ViewModels
                         group => group.OrderBy(d => d.IdCobradorNavigation!.Codigo).ToList() // Ordenar cada grupo internamente
                     );
 
-                return GenerateHtmlReport(DonantesPorCobrador, zona: "General");
+                return GenerateHtmlReport(DonantesPorCobrador, zona: "General", periodo: $"{MesPerido}/{AñoPerido}");
             }
             else if (OpcionSeleccionada == 2)
             {
@@ -137,7 +146,7 @@ namespace AppFundacion.ViewModels
                         group => group.First().IdCobradorNavigation!.CodigoNombre, // Usar CodigoNombre como clave
                         group => group.OrderBy(d => d.IdCobradorNavigation!.Codigo).ToList() // Ordenar donantes dentro de cada grupo
                     );
-                return GenerateHtmlReport(DonantesPorCobrador, zona: ZonaSeleccionada.Nombre!);
+                return GenerateHtmlReport(DonantesPorCobrador, zona: ZonaSeleccionada.Nombre!, periodo: $"{MesPerido}/{AñoPerido}");
             }
             else
             {
@@ -164,7 +173,7 @@ namespace AppFundacion.ViewModels
                         group => group.OrderBy(d => d.IdCobradorNavigation!.Codigo).ToList() // Ordenar cada grupo internamente
                     );
 
-                return GenerateHtmlTarjetas(DonantesPorCobrador, zona: "General");
+                return GenerateHtmlTarjetas(DonantesPorCobrador, zona: "General", periodo: $"{MesPerido}/{AñoPerido}");
             }
             else if (OpcionSeleccionadaTarjeta == 2)
             {
@@ -185,7 +194,7 @@ namespace AppFundacion.ViewModels
                         group => group.First().IdCobradorNavigation!.CodigoNombre, // Usar CodigoNombre como clave
                         group => group.OrderBy(d => d.IdCobradorNavigation!.Codigo).ToList() // Ordenar donantes dentro de cada grupo
                     );
-                return GenerateHtmlTarjetas(DonantesPorCobrador, zona: ZonaSeleccionadaTarjeta.Nombre!);
+                return GenerateHtmlTarjetas(DonantesPorCobrador, zona: ZonaSeleccionadaTarjeta.Nombre!, periodo: $"{MesPerido}/{AñoPerido}");
             }
             else
             {
@@ -197,7 +206,7 @@ namespace AppFundacion.ViewModels
 
 
 
-        public string GenerateHtmlReport(Dictionary<string, List<Donante>> donantesPorCobrador, string zona)
+        public string GenerateHtmlReport(Dictionary<string, List<Donante>> donantesPorCobrador, string zona, string periodo)
         {
             var html = new StringBuilder();
             html.Append(
@@ -220,7 +229,8 @@ namespace AppFundacion.ViewModels
                 "</head>" +
                 "<body>" +
                 "<div class='header'>FUNDACION SANTAFESINA VIRGEN DE LUJAN -- Reporte de donantes por cobrador</div>" +
-                $"<div class='header'>Zona: {zona}</div>"
+                $"<div class='header'>Zona: {zona}</div>" +
+                $"<div class='header'>Periodo: {periodo}</div>"
                 );
 
             foreach (var entry in donantesPorCobrador)
@@ -263,12 +273,11 @@ namespace AppFundacion.ViewModels
             html.Append(
                 "</body>" +
                 "</html>");
-
             return html.ToString();
         }
 
 
-        public string GenerateHtmlTarjetas(Dictionary<string, List<Donante>> donantesPorCobrador, string zona)
+        public string GenerateHtmlTarjetas(Dictionary<string, List<Donante>> donantesPorCobrador, string zona, string periodo)
         {
             var html = new StringBuilder();
             html.Append(
@@ -278,27 +287,28 @@ namespace AppFundacion.ViewModels
                     "<style>" +
                         "body { font-family: Arial, sans-serif; font-size: 12px; margin: 0; padding: 0; }" +
                         ".header { font-family: Times, serif; text-align: left; font-size: 14px; font-weight: bold; margin-bottom: 20px; }" +
-                        ".donantes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0px; }" +
-                        ".donante-title { text-align: center; font-weight: bold; font-size: 10px; margin-bottom: 0px; }" +
+                        ".donantes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0px; }" +
+                        ".donante-title { text-align: center; font-weight: bold; font-size: 13px; margin-bottom: 0px; }" +
                         ".donante-card { border: 1px dotted black; padding: 10px; font-size: 8px; page-break-inside: avoid; break-inside: avoid; }" +
                         ".donante-info { margin-bottom: 5px;}" +
-                        "table { width: 100%; font-size: 8px; border-collapse: collapse;}" +
-                        "tr { margin: 0; }" + // Reducido margin
-                        "td.label { text-align: left; width: 30%; }" + // Ajuste de ancho
-                        "td.value { width: 70%; font-weight: bold; }" + // Ajuste de ancho
+                        "table { width: 100%; font-size: 13px; border-collapse: collapse;}" +
+                        "tr { margin: 0; line-height: 1; padding: 0 }" + 
+                        "td.label { text-align: left; width: 30%; }" + 
+                        "td.value { width: 70%; font-weight: bold; }" + 
                         "strong { font-family: 'Courier New', Courier, monospace; }" +
                         "@media print {" +
-                            "@page { margin: 2cm; }" +
+                            "@page { margin: 0cm; }" +
                             "body { margin: 0; padding: 0; }" +
                             ".header { position: relative; page-break-after: avoid; }" +
-                            ".donantes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }" +  // Ajuste en impresión
-                            ".donante-card { page-break-inside: avoid; break-inside: avoid; }" +  // Evita cortes
+                            ".donantes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }" + 
+                            ".donante-card { page-break-inside: avoid; break-inside: avoid; }" + 
                         "}" +
                     "</style>" +
                 "</head>" +
                 "<body>" +
                 "<div class='header'>FUNDACION SANTAFESINA VIRGEN DE LUJAN -- Reporte de donantes por cobrador</div>" +
-                $"<div class='header'>Zona: {zona}</div>"
+                $"<div class='header'>Zona: {zona}</div>" +
+                $"<div class='header'>Periodo: {periodo}</div>"
             );
 
             foreach (var entry in donantesPorCobrador)
@@ -312,15 +322,14 @@ namespace AppFundacion.ViewModels
                     html.Append(
                         "<div class='donante-card'>" +
                             $"<div class='donante-title'>FUNDACION SANTAFESINA VIRGEN DE LUJAN</div>" + // Título añadido
-                            $"<div style='text-align: center; margin-bottom: 10px; font-size: 8px'>Para enfermos Oncológicos sin recursos</div>" +
+                            $"<div style='text-align: center; margin-bottom: 10px; font-size: 11px'>Para enfermos Oncológicos sin recursos</div>" +
                             "<table>" +
-                                $"<tr><td class='label'>Dte. Volunt:</td><td class='value'><strong>{donante.Id} {donante.NombreApellido}</strong></td></tr>" +
-                                $"<tr><td class='label'>Domicilio:</td><td class='value'><strong>{donante.Domicilio}</strong></td></tr>" +
-                                $"<tr><td class='label'>Localidad:</td><td class='value'><strong>{donante.Ciudad}</strong></td></tr>" +
-                                $"<tr><td class='label'>F.Ingreso:</td><td class='value'><strong>{donante.FechaIngreso?.ToString("dd/MM/yyyy")}</strong></td></tr>" +
-                                $"<tr><td class='label'>Periodo:</td><td class='value'><strong>{DateTime.Now:MM/yyyy}</strong></td></tr>" +
-                                $"<tr><td class='label'>Importe:</td><td class='value'><strong>${donante.Monto}</strong></td></tr>" +
-                                $"<tr><td class='label'>Cobrador:</td><td class='value'><strong>{cobradorNombre}</strong></td></tr>" +
+                                $"<tr><td class='label'>Dte. Volunt:</td><td class='value' colspan='3'><strong>{donante.Id} {donante.NombreApellido}</strong></td></tr>" +
+                                $"<tr><td class='label'>Domicilio:</td><td class='value' colspan='3'><strong>{donante.Domicilio}</strong></td></tr>" +
+                                $"<tr><td class='label'>Localidad:</td><td class='value' colspan='3'><strong>{donante.Ciudad}</strong></td></tr>" +
+                                $"<tr><td class='label'>F.Ingreso:</td><td class='value' colspan='3'><strong>{donante.FechaIngreso?.ToString("dd/MM/yyyy")}</strong></td></tr>" +
+                                $"<tr><td class='label'>Periodo:</td><td style='width: 30%'><strong>{periodo}</strong></td><td>Importe:</td><td class='value' ><strong>${donante.Monto}</strong></td></tr>" +
+                                $"<tr><td class='label'>Cobrador:</td><td class='value' colspan='3'><strong>{cobradorNombre}</strong></td></tr>" +
                             "</table>" +
                         "</div>"
                     );

@@ -28,12 +28,13 @@
 
                 <HorizontalStackLayout Grid.Column="0" Padding="15" Spacing="10">
                     <material:DropdownField Title="Cobrador" ItemsSource="{Binding ListaCobradores, Mode=TwoWay}"
-                                        SelectedItem="{Binding CobradorSeleccionado, Mode=TwoWay}"
-                                        Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.CircleChevronDown}}"/>
+                                            SelectedItem="{Binding CobradorSeleccionado, Mode=TwoWay}"
+                                            Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.CircleChevronDown}}"/>
                     <material:DropdownField Title="Elige una zona"
-                                        ItemsSource="{Binding ListaZonas}"
-                                        SelectedItem="{Binding ZonaSeleccionada, Mode=TwoWay}"
-                                        Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.CircleChevronDown}}"/>
+                                            ItemsSource="{Binding ListaZonas}"
+                                            SelectedItem="{Binding ZonaSeleccionada, Mode=TwoWay}"
+                                            Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.CircleChevronDown}}"
+                                            IsEnabled="{Binding IsEnableDropdownZona}"/>
                     <material:TextField Title="Buscar" 
                                         AllowClear="True"
                                         Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.User}}"

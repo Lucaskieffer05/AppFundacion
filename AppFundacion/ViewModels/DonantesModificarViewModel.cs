@@ -82,7 +82,7 @@ namespace AppFundacion.ViewModels
             var resultado = await _donanteController.UpdateDonante(DonanteModificar);
             if (resultado)
             {
-                await Shell.Current.DisplayAlert("Exito", "Donante modificado con exito", "OK");
+                //await Shell.Current.DisplayAlert("Exito", "Donante modificado con exito", "OK");
                 await Shell.Current.GoToAsync("..");
                 WeakReferenceMessenger.Default.Send(new DonanteModificadoMessage(true));
             }

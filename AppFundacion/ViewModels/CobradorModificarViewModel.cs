@@ -99,7 +99,7 @@ namespace AppFundacion.ViewModels
 
             if (resultado)
             {
-                await Shell.Current.DisplayAlert("Exito", "Cobrador modificado con exito", "OK");
+                await Shell.Current.DisplayAlert("Exito", "Cobrador modificado con exito. Recuerda actualizar la tabla del menú 'Donantes'.", "OK");
                 await Shell.Current.GoToAsync("..");
                 WeakReferenceMessenger.Default.Send(new CobradorModificarMessage(true));
             }

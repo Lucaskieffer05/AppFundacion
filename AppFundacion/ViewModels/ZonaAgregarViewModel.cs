@@ -60,6 +60,7 @@ namespace AppFundacion.ViewModels
                 if (ZonaAgregar.Nombre == null || ZonaAgregar.Nombre == "")
                 {
                     await Shell.Current.DisplayAlert("Error!", "Escribe un nombre adecuado a la Zona", "OK");
+                    return;
                 }
                 var confirmacion = await Shell.Current.DisplayAlert("Agregar Zona", $"¿Está seguro que desea agregar zona {ZonaAgregar.Nombre}?", "Si", "No");
 
@@ -69,7 +70,7 @@ namespace AppFundacion.ViewModels
                 }
 
                 var resultado = await _zonaController.AddZona(ZonaAgregar);
-                string mensaje = resultado ? "La zona fue agregado con éxito" : "Ocurrió un error al agregar la zona";
+                string mensaje = resultado ? "La zona fue agregado con éxito. Recuerda actualizar la tabla del menú 'Donantes'." : "Ocurrió un error al agregar la zona";
 
                 await Shell.Current.DisplayAlert(resultado ? "Tarea Exitosa" : "Error", mensaje, "OK");
                 await CargarListasAsync();
@@ -103,7 +104,7 @@ namespace AppFundacion.ViewModels
                         var resultado = await _zonaController.UpdateZona(ZonaSeleccionado);
                         if (resultado)
                         {
-                            await Shell.Current.DisplayAlert("Zona Modificada", "La zona ha sido modificada correctamente.", "OK");
+                            await Shell.Current.DisplayAlert("Zona Modificada", "La zona ha sido modificada correctamente. Recuerda actualizar la tabla del menú 'Donantes'.", "OK");
                             await CargarListasAsync();
                         }
                         else
@@ -148,7 +149,7 @@ namespace AppFundacion.ViewModels
 
                 if (resultado)
                 {
-                    await Shell.Current.DisplayAlert("Zona Eliminada", "La Zona ha sido eliminado correctamente.", "OK");
+                    await Shell.Current.DisplayAlert("Zona Eliminada", "La Zona ha sido eliminado correctamente. Recuerda actualizar la tabla del menú 'Donantes'.", "OK");
                     await CargarListasAsync();
                 }
                 else

@@ -47,6 +47,9 @@ namespace AppFundacion.ViewModels
         [ObservableProperty]
         private Donante donanteSeleccionado = null!;
 
+        [ObservableProperty]
+        private bool isEnableDropdownZona = true;
+
         private readonly object _donanteAgregadoToken = new();
 
 
@@ -83,6 +86,10 @@ namespace AppFundacion.ViewModels
         }
         partial void OnCobradorSeleccionadoChanged(Cobrador value)
         {
+            if (CobradorSeleccionado.Id == -1 && ZonaSeleccionada.Id != -1)
+            {
+                ZonaSeleccionada = new Zona { Id = -1, Nombre = "Ninguna" };
+            }
             FiltrarCobradorZona();
         }
 
@@ -95,22 +102,27 @@ namespace AppFundacion.ViewModels
         {
             if (CobradorSeleccionado.Id == -1 && ZonaSeleccionada.Id == -1)
             {
+                IsEnableDropdownZona = true;
                 FiltrarDonantes();
             }
             else if (CobradorSeleccionado.Id != -1 && ZonaSeleccionada.Id == -1)
             {
                 ListaDonantes = new ObservableCollection<Donante>(_todosLosDonantes.Where(d => d.IdCobrador == CobradorSeleccionado.Id));
                 ZonaSeleccionada = CobradorSeleccionado.IdZonaNavigation;
+                IsEnableDropdownZona = false;
                 FiltrarDonantes(new List<Donante>(ListaDonantes));
             }
             else if (CobradorSeleccionado.Id == -1 && ZonaSeleccionada.Id != -1)
             {
+                IsEnableDropdownZona = true;
                 ListaDonantes = new ObservableCollection<Donante>(_todosLosDonantes.Where(d => d.IdCobradorNavigation!.IdZona == ZonaSeleccionada.Id));
                 FiltrarDonantes(new List<Donante>(ListaDonantes));
             }
             else
             {
                 ListaDonantes = new ObservableCollection<Donante>(_todosLosDonantes.Where(d => d.IdCobrador == CobradorSeleccionado.Id && d.IdCobradorNavigation!.IdZona == ZonaSeleccionada.Id));
+                ZonaSeleccionada = CobradorSeleccionado.IdZonaNavigation;
+                IsEnableDropdownZona = false;
                 FiltrarDonantes(new List<Donante>(ListaDonantes));
             }
         }
