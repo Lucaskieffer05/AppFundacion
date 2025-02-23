@@ -217,8 +217,9 @@ namespace AppFundacion.ViewModels
                         "body { font-family: Arial, sans-serif; font-size: 12px; margin: 0; padding: 0; }" +
                         ".header { font-family: Times, serif; text-align: left; font-size: 14px; font-weight: bold; margin-bottom: 20px; }" +
                         "table { width: 100%; border-collapse: collapse; font-size: 8px; margin-bottom: 20px; }" +
-                        "th, td { border: 1px solid black; padding: 2px 5px; text-align: center; line-height: 1.2; }" + // Ajuste de espacio
+                        "th, td { border: 1px solid black; padding: 2px 5px; text-align: center; line-height: 1.2; }" +
                         "thead { display: table-header-group; background-color: #d3d3d3; -webkit-print-color-adjust: exact; print-color-adjust: exact; }" +
+                        ".no-border { border: none !important; background-color: white !important; }" +
                         "@media print {" +
                             "@page { margin: 2cm; }" +
                             "body { margin: 0; padding: 0; }" +
@@ -228,10 +229,10 @@ namespace AppFundacion.ViewModels
                     "</style>" +
                 "</head>" +
                 "<body>" +
-                "<div class='header'>FUNDACION SANTAFESINA VIRGEN DE LUJAN -- Reporte de donantes por cobrador</div>" +
+                 "<div class='header'>FUNDACION SANTAFESINA VIRGEN DE LUJAN -- Reporte de donantes por cobrador</div>" +
                 $"<div class='header'>Zona: {zona}</div>" +
                 $"<div class='header'>Periodo: {periodo}</div>"
-                );
+            );
 
             foreach (var entry in donantesPorCobrador)
             {
@@ -240,6 +241,13 @@ namespace AppFundacion.ViewModels
                     "<table>" +
                         "<thead>" +
                             "<tr>" +
+                                "<th colspan='8'>" +  // Encabezado repetido en cada página
+                                    "FUNDACION SANTAFESINA VIRGEN DE LUJAN -- Reporte de donantes por cobrador<br>" +
+                                    $"{entry.Key} | Zona: {zona} | Periodo: {periodo} | F. Imprecion: {DateTime.Now}" +
+                                "</th>" +
+                            "</tr>" +
+                            "<tr>" +
+                                "<th class='no-border'>N.º</th>" +
                                 "<th>Codigo</th>" +
                                 "<th>Nombre y Apellido</th>" +
                                 "<th>Domicilio</th>" +
@@ -252,10 +260,12 @@ namespace AppFundacion.ViewModels
                         "<tbody>");
 
                 var montoTotal = 0;
+                var numeroDonante = 1;
                 foreach (var donante in entry.Value)
                 {
                     html.Append(
                         $"<tr>" +
+                            $"<td style='border: none'>{numeroDonante}</td>" +
                             $"<td>{donante.Id}</td>" +
                             $"<td>{donante.NombreApellido}</td>" +
                             $"<td>{donante.Domicilio}</td>" +
@@ -264,17 +274,20 @@ namespace AppFundacion.ViewModels
                             $"<td>{donante.FechaIngreso?.ToString("dd/MM/yyyy")}</td>" +
                             $"<td>{donante.Monto}</td>" +
                         $"</tr>");
-                    montoTotal = montoTotal + donante.Monto;
+                    montoTotal += donante.Monto;
+                    numeroDonante += 1;
                 }
                 html.Append("</tbody></table>");
                 html.Append($"<h4 style='text-align: right; margin-right: 55px;'>Monto total de {entry.Key} es: ${montoTotal}</h4>");
             }
 
-            html.Append(
-                "</body>" +
-                "</html>");
+            html.Append("</body></html>");
             return html.ToString();
         }
+
+
+
+
 
 
         public string GenerateHtmlTarjetas(Dictionary<string, List<Donante>> donantesPorCobrador, string zona, string periodo)
