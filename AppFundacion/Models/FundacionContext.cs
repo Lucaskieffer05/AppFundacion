@@ -6,13 +6,16 @@ namespace AppFundacion.Models;
 
 public partial class FundacionContext : DbContext
 {
+    private readonly string? stringconnection;
     public FundacionContext()
     {
+        stringconnection = Preferences.Get("stringConnection", defaultValue: null);
     }
 
     public FundacionContext(DbContextOptions<FundacionContext> options)
         : base(options)
     {
+        stringconnection = Preferences.Get("stringConnection", defaultValue: null);
     }
 
     public virtual DbSet<Cobrador> Cobradores { get; set; }
@@ -24,7 +27,7 @@ public partial class FundacionContext : DbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-            optionsBuilder.UseSqlServer("Server=localhost;Initial Catalog=Fundacion;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
+            optionsBuilder.UseSqlServer(stringconnection);
 
         }
     }

@@ -89,6 +89,9 @@
 	  <MauiXaml Update="Views\CobradorModificarView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\ConfiguracionView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\DonanteAgregarView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

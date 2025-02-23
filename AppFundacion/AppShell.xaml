@@ -53,6 +53,12 @@
             Route="ZonaAgregarView"
             Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Gear}, Color=Black}"/>
 
+        <ShellContent
+            Title="Configuración"
+            ContentTemplate="{DataTemplate local:ConfiguracionView}"
+            Route="ConfiguracioView"
+            Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Lock}, Color=Black}"/>  
+
     </FlyoutItem>
 
     <Shell.FlyoutFooter>

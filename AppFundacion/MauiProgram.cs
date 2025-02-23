@@ -84,6 +84,9 @@ namespace AppFundacion
             builder.Services.AddTransient<ZonaAgregarView>();
             builder.Services.AddTransient<ZonaAgregarViewModel>();
 
+            builder.Services.AddTransient<ConfiguracionView>();
+            builder.Services.AddTransient<ConfiguracionViewModel>();
+
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

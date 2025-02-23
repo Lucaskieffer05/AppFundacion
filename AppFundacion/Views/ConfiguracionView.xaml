@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<uranium:UraniumContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                            x:Class="AppFundacion.Views.ConfiguracionView"
+                            Title="ConfiguracionView"
+                            xmlns:viewModels="clr-namespace:AppFundacion.ViewModels"
+                            xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+                            xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+                            xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome">
+    
+    <uranium:UraniumContentPage.BindingContext>
+        <viewModels:ConfiguracionViewModel/>
+    </uranium:UraniumContentPage.BindingContext>
+
+
+    <uranium:GridLayout RowCount="1" 
+                        ColumnCount="1"
+                        HorizontalOptions="Center" 
+                        VerticalOptions="Center">
+
+        <Border Padding="20" Stroke="Gray" IsVisible="{Binding IsPasswordFieldVisible}">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="10"/>
+            </Border.StrokeShape>
+            <HorizontalStackLayout Spacing="20">
+                <material:TextField Title="Introduzca constraseña" 
+                                    IsPassword="True" 
+                                    Text="{Binding Password}"
+                                    Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Key}, Color=Black}"
+                                    MinimumWidthRequest="200"
+                                    MaximumWidthRequest="200"/>
+                <Button StyleClass="FilledButton" Text="Acceder" Command="{Binding AccederCommand}"/>
+            </HorizontalStackLayout>
+        </Border>
+
+        <Border Padding="20" Stroke="Gray" IsVisible="{Binding IsConfigFieldVisible}">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="10"/>
+            </Border.StrokeShape>
+            <HorizontalStackLayout Spacing="20">
+                <material:EditorField Title="String de conexion para la base de datos"
+                                      Text="{Binding StringConnection, Mode=TwoWay}"
+                                      Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Database}, Color=Black}"
+                                      MinimumWidthRequest="400"/>
+                <Button StyleClass="FilledButton" Text="Guardar" Command="{Binding GuardarCommand}"/>
+            </HorizontalStackLayout>
+        </Border>
+
+    </uranium:GridLayout>
+</uranium:UraniumContentPage>
