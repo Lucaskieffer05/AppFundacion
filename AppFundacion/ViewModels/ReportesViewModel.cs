@@ -8,6 +8,7 @@ using System.Text;
 using System.Diagnostics;
 using Microsoft.Extensions.Primitives;
 using DocumentFormat.OpenXml.Drawing.Charts;
+using System.Collections.Specialized;
 
 namespace AppFundacion.ViewModels
 {
@@ -53,7 +54,7 @@ namespace AppFundacion.ViewModels
         [ObservableProperty]
         private int añoPerido;
 
-
+        private readonly string? pathSello;
 
 
         // -------------------------------------------------------------------
@@ -72,6 +73,7 @@ namespace AppFundacion.ViewModels
             VisibleDropdownTarjeta = false;
             MesPerido = DateTime.Now.Month;
             AñoPerido = DateTime.Now.Year;
+            pathSello = Preferences.Get("pathSello", defaultValue: null);
         }
 
         // Método que se ejecuta cuando cambia OpcionSeleccionada
@@ -208,6 +210,7 @@ namespace AppFundacion.ViewModels
 
         public string GenerateHtmlReport(Dictionary<string, List<Donante>> donantesPorCobrador, string zona, string periodo)
         {
+
             var html = new StringBuilder();
             html.Append(
                 "<html>" +
@@ -215,13 +218,13 @@ namespace AppFundacion.ViewModels
                     "<title>Reporte de Donantes por Cobrador</title>" +
                     "<style>" +
                         "body { font-family: Arial, sans-serif; font-size: 12px; margin: 0; padding: 0; }" +
-                        ".header { font-family: Times, serif; text-align: left; font-size: 14px; font-weight: bold; margin-bottom: 20px; }" +
-                        "table { width: 100%; border-collapse: collapse; font-size: 8px; margin-bottom: 20px; }" +
+                        ".header { font-family: Times, serif; text-align: left; font-size: 14px; font-weight: bold; margin-bottom: 20px }" +
+                        "table { width: 100%; border-collapse: collapse; font-size: 10px; margin-bottom: 20px; }" +
                         "th, td { border: 1px solid black; padding: 2px 5px; text-align: center; line-height: 1.2; }" +
                         "thead { display: table-header-group; background-color: #d3d3d3; -webkit-print-color-adjust: exact; print-color-adjust: exact; }" +
                         ".no-border { border: none !important; background-color: white !important; }" +
                         "@media print {" +
-                            "@page { margin: 2cm; }" +
+                            "@page { margin: 1cm; }" +
                             "body { margin: 0; padding: 0; }" +
                             ".header { position: relative; page-break-after: avoid; }" +
                             "thead th { background-color: #d3d3d3 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }" +
@@ -286,10 +289,6 @@ namespace AppFundacion.ViewModels
         }
 
 
-
-
-
-
         public string GenerateHtmlTarjetas(Dictionary<string, List<Donante>> donantesPorCobrador, string zona, string periodo)
         {
             var html = new StringBuilder();
@@ -299,7 +298,7 @@ namespace AppFundacion.ViewModels
                     "<title>Reporte de Donantes por Cobrador</title>" +
                     "<style>" +
                         "body { font-family: Arial, sans-serif; font-size: 12px; margin: 0; padding: 0; }" +
-                        ".header { font-family: Times, serif; text-align: left; font-size: 14px; font-weight: bold; margin-bottom: 20px; }" +
+                        ".header { font-family: Times, serif; text-align: left; font-size: 14px; font-weight: bold; margin-bottom: 20px; margin-left: 20px}" +
                         ".donantes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0px; }" +
                         ".donante-title { text-align: center; font-weight: bold; font-size: 13px; margin-bottom: 0px; }" +
                         ".donante-card { border: 1px dotted black; padding: 10px; font-size: 8px; page-break-inside: avoid; break-inside: avoid; }" +
@@ -319,14 +318,14 @@ namespace AppFundacion.ViewModels
                     "</style>" +
                 "</head>" +
                 "<body>" +
-                "<div class='header'>FUNDACION SANTAFESINA VIRGEN DE LUJAN -- Reporte de donantes por cobrador</div>" +
+                "<div class='header'>FUNDACION SANTAFESINA VIRGEN DE LUJAN -- Recibos de donantes por cobrador</div>" +
                 $"<div class='header'>Zona: {zona}</div>" +
                 $"<div class='header'>Periodo: {periodo}</div>"
             );
 
             foreach (var entry in donantesPorCobrador)
             {
-                html.Append($"<h3>Cobrador: {entry.Key}</h3>");
+                html.Append($"<h3 style='margin-left: 20px'>Cobrador: {entry.Key}</h3>");
                 html.Append("<div class='donantes-grid'>"); // Inicia la grilla
 
                 foreach (var donante in entry.Value)
@@ -334,16 +333,21 @@ namespace AppFundacion.ViewModels
                     var cobradorNombre = donante.IdCobradorNavigation?.CodigoNombre ?? "N/A";
                     html.Append(
                         "<div class='donante-card'>" +
-                            $"<div class='donante-title'>FUNDACION SANTAFESINA VIRGEN DE LUJAN</div>" + // Título añadido
-                            $"<div style='text-align: center; margin-bottom: 10px; font-size: 11px'>Para enfermos Oncológicos sin recursos</div>" +
-                            "<table>" +
-                                $"<tr><td class='label'>Dte. Volunt:</td><td class='value' colspan='3'><strong>{donante.Id} {donante.NombreApellido}</strong></td></tr>" +
-                                $"<tr><td class='label'>Domicilio:</td><td class='value' colspan='3'><strong>{donante.Domicilio}</strong></td></tr>" +
-                                $"<tr><td class='label'>Localidad:</td><td class='value' colspan='3'><strong>{donante.Ciudad}</strong></td></tr>" +
-                                $"<tr><td class='label'>F.Ingreso:</td><td class='value' colspan='3'><strong>{donante.FechaIngreso?.ToString("dd/MM/yyyy")}</strong></td></tr>" +
-                                $"<tr><td class='label'>Periodo:</td><td style='width: 30%'><strong>{periodo}</strong></td><td>Importe:</td><td class='value' ><strong>${donante.Monto}</strong></td></tr>" +
-                                $"<tr><td class='label'>Cobrador:</td><td class='value' colspan='3'><strong>{cobradorNombre}</strong></td></tr>" +
-                            "</table>" +
+                            "<div class='donante-title'>FUNDACION SANTAFESINA VIRGEN DE LUJAN</div>" +
+                            "<div style='text-align: center; margin-bottom: 10px; font-size: 11px'>Para enfermos Oncológicos sin recursos</div>" +
+                            "<div style='display: flex; align-items: center;'>" +
+                                "<table style='width: 70%;'>" +
+                                    "<tr><td class='label'>Dte. Volunt:</td><td class='value' colspan='3'><strong>" + donante.Id + " " + donante.NombreApellido + "</strong></td></tr>" +
+                                    "<tr><td class='label'>Domicilio:</td><td class='value' colspan='3'><strong>" + donante.Domicilio + "</strong></td></tr>" +
+                                    "<tr><td class='label'>Localidad:</td><td class='value' colspan='3'><strong>" + donante.Ciudad + "</strong></td></tr>" +
+                                    "<tr><td class='label'>F.Ingreso:</td><td class='value' colspan='3'><strong>" + (donante.FechaIngreso?.ToString("dd/MM/yyyy")) + "</strong></td></tr>" +
+                                    "<tr><td class='label'>Periodo:</td><td style='width: 40%'><strong>" + periodo + "</strong></td><td>Importe:</td><td class='value'><strong>$" + donante.Monto + "</strong></td></tr>" +
+                                    "<tr><td class='label'>Cobrador:</td><td class='value' colspan='3'><strong>" + cobradorNombre + "</strong></td></tr>" +
+                                "</table>");
+                    //verificar si existe la ruta y si el archivo existe
+                    if (pathSello != null && File.Exists(pathSello)) html.Append($"<img src='{pathSello}' alt='Sello' style='height: 75px; width: auto; margin-left: 10px;'>");
+                    html.Append(
+                            "</div>" +
                         "</div>"
                     );
                 }

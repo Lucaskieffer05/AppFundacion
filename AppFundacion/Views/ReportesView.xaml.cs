@@ -57,7 +57,6 @@ public partial class ReportesView : UraniumContentPage
     public async void VerReporte(object sender, EventArgs e)
     {
         if (ViewModel is not null) { 
-
             var htmlContent = ViewModel.SeleccionReporteHtml();
             if(htmlContent == "")
             {

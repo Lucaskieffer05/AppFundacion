@@ -37,14 +37,28 @@
             <Border.StrokeShape>
                 <RoundRectangle CornerRadius="10"/>
             </Border.StrokeShape>
-            <HorizontalStackLayout Spacing="20">
-                <material:EditorField Title="String de conexion para la base de datos"
-                                      Text="{Binding StringConnection, Mode=TwoWay}"
-                                      Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Database}, Color=Black}"
-                                      MinimumWidthRequest="400"/>
-                <Button StyleClass="FilledButton" Text="Guardar" Command="{Binding GuardarCommand}"/>
-            </HorizontalStackLayout>
+            <VerticalStackLayout Spacing="20">
+                
+                
+                <material:EditorField Title="Ruta del sello para recibos"
+                        Text="{Binding PathSello, Mode=TwoWay}"
+                        Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Database}, Color=Black}"
+                        MinimumWidthRequest="400"/>
+                
+                <HorizontalStackLayout Spacing="20">
+                    <material:EditorField Title="String de conexion para la base de datos"
+                                          Text="{Binding StringConnection, Mode=TwoWay}"
+                                          Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Database}, Color=Black}"
+                                          MinimumWidthRequest="400"/>
+                    <Button StyleClass="FilledButton" Text="Guardar" Command="{Binding GuardarCommand}"/>
+                </HorizontalStackLayout>
+
+
+            </VerticalStackLayout>
+
         </Border>
+        
+        
 
     </uranium:GridLayout>
 </uranium:UraniumContentPage>

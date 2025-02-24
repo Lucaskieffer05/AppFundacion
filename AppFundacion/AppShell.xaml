@@ -42,13 +42,13 @@
             Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Briefcase}, Color=Black}"/>
 
         <ShellContent
-            Title="Gestion Cobradores"
+            Title="Gestión Cobradores"
             ContentTemplate="{DataTemplate local:CobradorAgregarView}"
             Route="CobradorAgregarView"
             Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Gear}, Color=Black}"/>
 
         <ShellContent
-            Title="Gestion Zonas"
+            Title="Gestión Zonas"
             ContentTemplate="{DataTemplate local:ZonaAgregarView}"
             Route="ZonaAgregarView"
             Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Gear}, Color=Black}"/>
@@ -56,7 +56,7 @@
         <ShellContent
             Title="Configuración"
             ContentTemplate="{DataTemplate local:ConfiguracionView}"
-            Route="ConfiguracioView"
+            Route="ConfiguracionView"
             Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Lock}, Color=Black}"/>  
 
     </FlyoutItem>

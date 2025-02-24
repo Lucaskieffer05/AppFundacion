@@ -21,9 +21,13 @@ namespace AppFundacion.ViewModels
         [ObservableProperty]
         private string? stringConnection;
 
+        [ObservableProperty]
+        private string? pathSello = null;
+
         public ConfiguracionViewModel()
         {
             StringConnection = Preferences.Get("stringConnection", defaultValue: null);
+            PathSello = Preferences.Get("pathSello", defaultValue: null);
             if (StringConnection == null)
             {
                 Preferences.Set("stringConnection", "Server=localhost;Initial Catalog=Fundacion;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
@@ -73,7 +77,15 @@ namespace AppFundacion.ViewModels
                 return;
             }
             Preferences.Set("stringConnection", StringConnection);
-            await Shell.Current.DisplayAlert("Exito", "Cadena de conexión guardada, reinicie la aplicacion", "OK");
+
+            if (PathSello == null || PathSello == "")
+            {
+                await Shell.Current.DisplayAlert("Error", "Introduzca una cadena de conexión valida", "OK");
+                return;
+            }
+            Preferences.Set("pathSello", PathSello);
+
+            await Shell.Current.DisplayAlert("Exito", "Configuración guardada, reinicie la aplicacion", "OK");
         }
 
 
