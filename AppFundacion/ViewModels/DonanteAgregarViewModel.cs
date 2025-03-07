@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using AppFundacion.Models;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 
 namespace AppFundacion.ViewModels
@@ -52,7 +53,22 @@ namespace AppFundacion.ViewModels
         [RelayCommand]
         async static Task VolverAtras()
         {
-            await Shell.Current.GoToAsync("..");
+            try
+            {
+                //await Shell.Current.Navigation.PopAsync();
+                await Shell.Current.GoToAsync("..");
+            }
+            catch (Exception ex)
+            {
+                // Registra el error en un archivo de log o muestra un mensaje de error
+                // Aquí se muestra un ejemplo de cómo registrar el error en un archivo de log
+                string logFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "error_log.txt");
+                logFilePath = "C:\\prueba\\error_log.txt";
+                await File.AppendAllTextAsync(logFilePath, $"{DateTime.Now}: {ex.Message}{Environment.NewLine}{ex.StackTrace}{Environment.NewLine}");
+
+                // También puedes mostrar un mensaje de error al usuario
+                await Shell.Current.DisplayAlert("Error", $"{ex}", "OK");
+            }
         }
 
         [RelayCommand]
