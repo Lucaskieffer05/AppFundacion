@@ -49,6 +49,20 @@ namespace AppFundacion.Controllers
             }
         }
 
+        // Ver si ya existe el donante por DNI
+        public async Task<bool> DonanteExists(string dni)
+        {
+            try
+            {
+                return await _context.Donantes.AnyAsync(d => d.Dni == dni);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
         // Agregar donante
         public async Task<bool> AddDonante(Donante donante)
         {

@@ -112,19 +112,42 @@ namespace AppFundacion.ViewModels
         [RelayCommand]
         public async Task ModificarCobrador()
         {
-            if (CobradorSeleccionado != null)
+            // Validar que la zona seleccionada no sea null
+            if (CobradorSeleccionado.IdZonaNavigation == null)
             {
-                var parametroNavigation = new Dictionary<string, object>
-                {
-                    {"cobradorModificar",this.CobradorSeleccionado}
-                };
+                await Shell.Current.DisplayAlert("Error", "Debe seleccionar una zona", "OK");
+                return;
+            }
+            if (CobradorSeleccionado.Nombre == null || CobradorSeleccionado?.Codigo == null || CobradorSeleccionado.Nombre == "")
+            {
+                await Shell.Current.DisplayAlert("Error", "Debe completar todos los campos", "OK");
+                return;
+            }
 
-                await Shell.Current.GoToAsync(nameof(CobradorModificarView), parametroNavigation);
+            var validarCodigo = _cobradorController.VerificarCodigoDuplicado(CobradorSeleccionado.Codigo, CobradorSeleccionado.Id);
+            if (validarCodigo)
+            {
+                await Shell.Current.DisplayAlert("Error", "El código ya existe", "OK");
+                CobradorSeleccionado = new();
+                return;
+            }
+
+
+
+            if (CobradorSeleccionado.IdZonaNavigation != null && CobradorSeleccionado.IdZona != CobradorSeleccionado.IdZonaNavigation.Id)
+                CobradorSeleccionado.IdZona = CobradorSeleccionado.IdZonaNavigation.Id;
+            var resultado = await _cobradorController.UpdateCobrador(CobradorSeleccionado);
+
+            if (resultado)
+            {
+                await Shell.Current.DisplayAlert("Exito", "Cobrador modificado con exito. Recuerda actualizar la tabla del menú 'Donantes'.", "OK");
+                await CargarListasAsync();
             }
             else
             {
-                await Shell.Current.DisplayAlert("Error!", "No se ha seleccionado ningun cobrador.", "OK");
+                await Shell.Current.DisplayAlert("Error", "Ocurrió un error al modificar el cobrador", "OK");
             }
+
         }
 
         [RelayCommand]

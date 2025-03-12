@@ -14,72 +14,101 @@
         <viewModels:CobradorAgregarViewModel/>
     </uranium:UraniumContentPage.BindingContext>
 
+    <ScrollView>
+        <Grid RowDefinitions="Auto,500,Auto,Auto">
 
-    <Grid RowDefinitions="Auto,*,Auto">
+            <Grid ColumnDefinitions="Auto" ColumnSpacing="10" Padding="20" HorizontalOptions="Center">
 
-        <Grid ColumnDefinitions="Auto,0.25*,0.25*,0.25*" ColumnSpacing="10" Padding="20">
+                <Border Grid.Row="0" Stroke="Silver" StrokeThickness="3" Padding="15" MinimumWidthRequest="400">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10"/>
+                    </Border.StrokeShape>
 
-            <Border Grid.Row="0" Stroke="Silver" StrokeThickness="3" Padding="15" MinimumWidthRequest="400">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="10"/>
-                </Border.StrokeShape>
+                    <HorizontalStackLayout  Grid.Column="0" Spacing="10">
+                        <material:TextField Title="Nombre" 
+                                                    AllowClear="True" 
+                                                    Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.User}}"
+                                                    Text="{Binding CobradorAgregar.Nombre, Mode=TwoWay}"
+                                                    MaximumWidthRequest="200"
+                                                    MinimumWidthRequest="180"/>
+                        <material:TextField Title="Codigo" 
+                                                    AllowClear="True" 
+                                                    Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.User}}"
+                                                    Text="{Binding CobradorAgregar.Codigo, Mode=TwoWay}"/>
 
-                <HorizontalStackLayout  Grid.Column="0" Spacing="10">
-                    <material:TextField Title="Nombre" 
-                                                AllowClear="True" 
-                                                Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.User}}"
-                                                Text="{Binding CobradorAgregar.Nombre, Mode=TwoWay}"
-                                                MaximumWidthRequest="200"
-                                                MinimumWidthRequest="180"/>
-                    <material:TextField Title="Codigo" 
-                                                AllowClear="True" 
-                                                Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.User}}"
-                                                Text="{Binding CobradorAgregar.Codigo, Mode=TwoWay}"/>
+                        <material:DropdownField Title="Elige zona"                                 
+                                                    ItemsSource="{Binding ListaZonas, Mode=TwoWay}"
+                                                    SelectedItem="{Binding ZonaSeleccionada, Mode=TwoWay}"
+                                                    MinimumWidthRequest="110"/>
+                        <Button Grid.Column="1" StyleClass="FilledButton" Text="Agregar Cobrador" Command="{Binding AgregarCobradorCommand}"/>
+                    </HorizontalStackLayout>
 
-                    <material:DropdownField Title="Elige zona"                                 
-                                                ItemsSource="{Binding ListaZonas, Mode=TwoWay}"
-                                                SelectedItem="{Binding ZonaSeleccionada, Mode=TwoWay}"
-                                                MinimumWidthRequest="110"/>
-                </HorizontalStackLayout>
+                </Border>
+            </Grid>
 
-            </Border>
+            <Grid ColumnDefinitions="0.5*,*,0.5*" Grid.Row="1" Grid.Column="1">
 
-            <Button Grid.Column="1" StyleClass="FilledButton" Text="Agregar Cobrador" Command="{Binding AgregarCobradorCommand}"/>
-            <Button Grid.Column="2" StyleClass="OutlinedButton" Text="Ver Detalles" Command="{Binding ModificarCobradorCommand}" TextColor="#32b33b"/>
-            <Button Grid.Column="3" StyleClass="OutlinedButton" Text="Eliminar Cobrador" TextColor="{StaticResource Error}" Command="{Binding EliminarCobradorCommand}" />
+                <Border Stroke="Silver" StrokeThickness="3" Grid.Column="1">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10"/>
+                    </Border.StrokeShape>
+                    <dg:DataGrid ItemsSource="{Binding ListaCobradores}" 
+                                     Style="{StaticResource TablaComun}"             
+                                     IsRefreshing="{Binding IsBusy}" 
+                                     PaginationEnabled="True" 
+                                     PageNumber="1"
+                                     SelectionMode="Single" 
+                                     SelectedItem="{Binding CobradorSeleccionado}"
+                                     BorderColor="Transparent">
+                        <dg:DataGrid.Columns>
+                            <dg:DataGridColumn Title="Codigo"  PropertyName="Codigo"/>
+                            <dg:DataGridColumn Title="Nombre" PropertyName="Nombre"/>
+                            <dg:DataGridColumn Title="Zona">
+                                <dg:DataGridColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label Text="{Binding IdZonaNavigation.Nombre}" 
+                                               HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    </DataTemplate>
+                                </dg:DataGridColumn.CellTemplate>
+                            </dg:DataGridColumn>
+                        </dg:DataGrid.Columns>
+                    </dg:DataGrid>
+                </Border>
+            </Grid>
+
+
+            <Grid Grid.Row="2" ColumnDefinitions="Auto" ColumnSpacing="10" Padding="20" HorizontalOptions="Center">
+
+                <Border Grid.Row="0" Stroke="Silver" StrokeThickness="3" Padding="15" MinimumWidthRequest="400">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10"/>
+                    </Border.StrokeShape>
+
+                    <HorizontalStackLayout  Grid.Column="0" Spacing="10">
+                        <material:TextField Title="Nombre" 
+                                         AllowClear="True" 
+                                         Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.User}}"
+                                         Text="{Binding CobradorSeleccionado.Nombre, Mode=TwoWay}"
+                                         MaximumWidthRequest="200"
+                                         MinimumWidthRequest="180"/>
+                        <material:TextField Title="Codigo" 
+                                         AllowClear="True" 
+                                         Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.User}}"
+                                         Text="{Binding CobradorSeleccionado.Codigo, Mode=TwoWay}"/>
+
+                        <material:DropdownField Title="Elige zona"                                 
+                                         ItemsSource="{Binding ListaZonas, Mode=TwoWay}"
+                                         SelectedItem="{Binding CobradorSeleccionado.IdZonaNavigation, Mode=TwoWay}"
+                                         MinimumWidthRequest="110"/>
+                        <Button StyleClass="OutlinedButton" Text="Guardar" Command="{Binding ModificarCobradorCommand}" TextColor="#32b33b"/>
+                        <Button StyleClass="OutlinedButton" Text="Eliminar Cobrador" TextColor="{StaticResource Error}" Command="{Binding EliminarCobradorCommand}" />
+                    </HorizontalStackLayout>
+
+                </Border>
+            </Grid>
+
+            <Grid Grid.Row="3" HeightRequest="50"/>
+
         </Grid>
-
-        <Grid ColumnDefinitions="0.5*,*,0.5*" Grid.Row="1" Grid.Column="1">
-
-            <Border Stroke="Silver" StrokeThickness="3" Grid.Column="1">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="10"/>
-                </Border.StrokeShape>
-                <dg:DataGrid ItemsSource="{Binding ListaCobradores}" 
-                                 Style="{StaticResource TablaComun}"             
-                                 IsRefreshing="{Binding IsBusy}" 
-                                 PaginationEnabled="True" 
-                                 PageNumber="1"
-                                 SelectionMode="Single" 
-                                 SelectedItem="{Binding CobradorSeleccionado}"
-                                 BorderColor="Transparent">
-                    <dg:DataGrid.Columns>
-                        <dg:DataGridColumn Title="Codigo"  PropertyName="Codigo"/>
-                        <dg:DataGridColumn Title="Nombre" PropertyName="Nombre"/>
-                        <dg:DataGridColumn Title="Zona">
-                            <dg:DataGridColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label Text="{Binding IdZonaNavigation.Nombre}" 
-                                           HorizontalOptions="Center" VerticalOptions="Center"/>
-                                </DataTemplate>
-                            </dg:DataGridColumn.CellTemplate>
-                        </dg:DataGridColumn>
-                    </dg:DataGrid.Columns>
-                </dg:DataGrid>
-            </Border>
-        </Grid>
-
-        <Grid Grid.Row="2" HeightRequest="50"/>
-
-    </Grid>
+    </ScrollView>
 </uranium:UraniumContentPage>

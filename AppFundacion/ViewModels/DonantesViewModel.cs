@@ -7,15 +7,33 @@ using AppFundacion.Views;
 using CommunityToolkit.Mvvm.Messaging;
 using AppFundacion.Mensajes;
 using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppFundacion.ViewModels
 {
     public partial class DonantesViewModel : ObservableObject
     {
 
-        // -------------------------------------------------------------------
-        // ----------------------- Definiciones ------------------------------
-        // -------------------------------------------------------------------
+        // --------------------------------------------------------------------------
+        // ----------------------- Definiciones de DonanteAgregarViewModel ----------
+        // --------------------------------------------------------------------------
+
+        [ObservableProperty]
+        private Donante? donanteAgregar = null;
+
+        // --------------------------------------------------------------------------
+        // ----------------------- Definiciones de DonanteModificarViewModel --------
+        // --------------------------------------------------------------------------
+
+        [ObservableProperty]
+        private Donante? donanteModificarAgregar = new();
+
+        [ObservableProperty]
+        private ObservableCollection<Cobrador> listaCobradoresModificar = [];
+
+        // --------------------------------------------------------------------------
+        // ----------------------- Definiciones de DonanteViewModel -----------------
+        // --------------------------------------------------------------------------
 
         private DonanteController _donanteController;
         private CobradorController _cobradorController;
@@ -52,6 +70,8 @@ namespace AppFundacion.ViewModels
 
         private readonly object _donanteAgregadoToken = new();
 
+        private readonly FundacionContext _context = new();
+
 
         // -------------------------------------------------------------------
         // ----------------------- Constructor -------------------------------
@@ -63,6 +83,11 @@ namespace AppFundacion.ViewModels
             _donanteController = new DonanteController(new FundacionContext());
             _cobradorController = new CobradorController(new FundacionContext());
             _zonaController = new ZonaController(new FundacionContext());
+            DonanteModificarAgregar = new()
+            {
+                FechaIngreso = DateTime.Now,
+                Pais = "Argentina"
+            };
 
             WeakReferenceMessenger.Default.Register<DonanteAgregadoMessage>(this, async (r, m) =>
             {
@@ -127,15 +152,14 @@ namespace AppFundacion.ViewModels
             }
         }
 
-
-            // -------------------------------------------------------------------
-            // ----------------------- Comandos y Consultas a DB -----------------
-            // -------------------------------------------------------------------
+        // -------------------------------------------------------------------
+        // ----------------------- Comandos y Consultas a DB de DonanteViewModel -----------------
+        // -------------------------------------------------------------------
 
         [RelayCommand]
         public async Task EliminarDonanteAsync()
         {
-            if (DonanteSeleccionado == null)
+            if (DonanteModificarAgregar == null)
             {
                 await Shell.Current.DisplayAlert("Error!", "No se ha seleccionado ningun donante.", "OK");
                 return;
@@ -145,14 +169,19 @@ namespace AppFundacion.ViewModels
 
             if (confirmacion)
             {
-                DonanteSeleccionado.IdCobradorNavigation = null;
-                var resultado = await _donanteController.DeleteDonante(DonanteSeleccionado.Id);
+                DonanteModificarAgregar.IdCobradorNavigation = null;
+                var resultado = await _donanteController.DeleteDonante(DonanteModificarAgregar.Id);
 
                 if (resultado)
                 {
                     await Shell.Current.DisplayAlert("Donante Eliminado", "El donante ha sido eliminado correctamente.", "OK");
                     await CargarListasAsync();
                     FiltrarCobradorZona();
+                    DonanteModificarAgregar = new()
+                    {
+                        FechaIngreso = DateTime.Now,
+                        Pais = "Argentina"
+                    };
                 }
                 else
                 {
@@ -221,12 +250,6 @@ namespace AppFundacion.ViewModels
             }
         }
 
-        [RelayCommand]
-        public async Task AgregarDonante()
-        {
-            await Shell.Current.GoToAsync(nameof(DonanteAgregarView));
-        }
-
 
 
         public async Task CargarListasAsync(bool actualizarTodo = false)
@@ -243,6 +266,7 @@ namespace AppFundacion.ViewModels
                 var cobradorList = await _cobradorController.GetAllCobradores();
                 cobradorList.Insert(0, CobradorSeleccionado);
                 ListaCobradores = new ObservableCollection<Cobrador>(cobradorList);
+                ListaCobradoresModificar = new ObservableCollection<Cobrador>(cobradorList);
 
                 ZonaSeleccionada = new Zona { Id = -1, Nombre = "Ninguna" };
                 var zonaList = await _zonaController.GetAllZonas();
@@ -250,7 +274,151 @@ namespace AppFundacion.ViewModels
                 ListaZonas = new ObservableCollection<Zona>(zonaList);
             }
 
+            DonanteModificarAgregar = new()
+            {
+                FechaIngreso = DateTime.Now,
+                Pais = "Argentina"
+            };
+
             IsBusy = false;
         }
+
+
+        // -----------------------------------------------------------------------------------------
+        // ----------------------- Comandos y Consultas a DB de DonanteModificarViewModel ----------
+        // -----------------------------------------------------------------------------------------
+
+        [RelayCommand]
+        async Task ModficiarDonador()
+        {
+            if (DonanteModificarAgregar == null || DonanteModificarAgregar.NombreApellido == null || DonanteModificarAgregar.NombreApellido == "")
+            {
+                await Shell.Current.DisplayAlert("Error", "Debes seleccionar un nombre adecuado", "OK");
+                return;
+            }
+
+            if (DonanteModificarAgregar.Monto <= 0)
+            {
+                await Shell.Current.DisplayAlert("Error", "Debes ingresar un monto adecuado", "OK");
+                return;
+            }
+
+
+            if (DonanteModificarAgregar == null || DonanteModificarAgregar.IdCobradorNavigation == null)
+            {
+                await Shell.Current.DisplayAlert("Error", "Ocurrió un error al modificar el donante", "OK");
+                return;
+            }
+            if (DonanteModificarAgregar.IdCobrador != DonanteModificarAgregar.IdCobradorNavigation.Id)
+            {
+                DonanteModificarAgregar.IdCobrador = DonanteModificarAgregar.IdCobradorNavigation.Id;
+            }
+            var resultado = await _donanteController.UpdateDonante(DonanteModificarAgregar);
+            if (!resultado)
+            {
+                await Shell.Current.DisplayAlert("Error", "Ocurrió un error al modificar el donante", "OK");
+                return;
+            }
+
+            await Shell.Current.DisplayAlert("Modificado", "El donante se modificó correctamente", "OK");
+
+            await CargarListasAsync();
+            FiltrarCobradorZona();
+        }
+
+
+        // -----------------------------------------------------------------------------------------
+        // ----------------------- Comandos y Consultas a DB de DonanteAgregarViewModel ------------
+        // -----------------------------------------------------------------------------------------
+
+
+        [RelayCommand]
+        async Task LimpiarAsync()
+        {
+            await CargarListasAsync();
+            FiltrarCobradorZona();
+            DonanteModificarAgregar = new Donante
+            {
+                FechaIngreso = DateTime.Now,
+                Pais = "Argentina"
+            };
+        }
+
+        [RelayCommand]
+        async Task AgregarDonante()
+        {
+            if (DonanteModificarAgregar == null || DonanteModificarAgregar.IdCobradorNavigation == null || DonanteModificarAgregar.NombreApellido == "" || DonanteModificarAgregar.Monto < 0)
+            {
+                await Shell.Current.DisplayAlert("Error", "Ocurrió un error al agregar el donante. Verifica el campo de cobrador, nombre y monto", "OK");
+                return;
+            }
+
+            var respuesta = await _donanteController.DonanteExists(DonanteModificarAgregar.Dni!);
+
+            if (respuesta)
+            {
+                await Shell.Current.DisplayAlert("Error", "Ya existe un donante con el DNI ingresado", "OK");
+                return;
+            }
+
+
+
+            // Crear un nuevo objeto Donante para agregar
+
+            var nuevoDonante = new Donante
+            {
+                Dni = DonanteModificarAgregar.Dni,
+                NombreApellido = DonanteModificarAgregar.NombreApellido,
+                Ciudad = DonanteModificarAgregar.Ciudad,
+                Provincia = DonanteModificarAgregar.Provincia,
+                Pais = DonanteModificarAgregar.Pais,
+                FechaIngreso = DonanteModificarAgregar.FechaIngreso,
+                Monto = DonanteModificarAgregar.Monto,
+                Domicilio = DonanteModificarAgregar.Domicilio,
+                IdCobrador = DonanteModificarAgregar.IdCobradorNavigation.Id
+            };
+
+            ReemplazarNulosConGuion(nuevoDonante);
+
+            // Evita que Entity Framework intente insertar un nuevo Cobrador
+            nuevoDonante.IdCobradorNavigation = null;
+
+            _donanteController = new DonanteController(new FundacionContext());
+            var resultado = await _donanteController.AddDonante(nuevoDonante);
+            string mensaje = resultado ? "El donante fue agregado con éxito" : "Ocurrió un error al agregar el donante";
+
+            await Shell.Current.DisplayAlert(resultado ? "Tarea Exitosa" : "Error", mensaje, "OK");
+
+            if (resultado)
+            {
+                DonanteModificarAgregar = new Donante
+                {
+                    FechaIngreso = DateTime.Now,
+                    Pais = "Argentina"
+                };
+            }
+
+            await CargarListasAsync();
+            FiltrarCobradorZona();
+        }
+
+
+
+        void ReemplazarNulosConGuion(Donante donante)
+        {
+            foreach (var prop in typeof(Donante).GetProperties())
+            {
+                if (prop.PropertyType == typeof(string))
+                {
+                    var valor = (string?)prop.GetValue(donante);
+                    if (string.IsNullOrEmpty(valor))
+                    {
+                        prop.SetValue(donante, "-");
+                    }
+                }
+            }
+        }
+
+
     }
 }

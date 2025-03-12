@@ -119,11 +119,14 @@ namespace AppFundacion.Controllers
         }
 
         // Verificar codigos duplicados
-        public bool VerificarCodigoDuplicado(int codigo)
+        public bool VerificarCodigoDuplicado(int codigo, int id=-1)
         {
             try
             {
-                return _context.Cobradores.Any(c => c.Codigo == codigo);
+                if(id == -1)
+                    return _context.Cobradores.Any(c => c.Codigo == codigo);
+
+                return  _context.Cobradores.Any(c => c.Codigo == codigo && c.Id != id);
             }
             catch (Exception ex)
             {

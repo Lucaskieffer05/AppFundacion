@@ -7,6 +7,7 @@
              xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
              xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
              xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
+             xmlns:validations="clr-namespace:AppFundacion.Validations"
              xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome">
 
     <uranium:UraniumContentPage.BindingContext>
@@ -14,72 +15,108 @@
     </uranium:UraniumContentPage.BindingContext>
 
 
+    <ScrollView>
+        <Grid RowDefinitions="Auto,Auto,*,Auto, Auto"> 
 
-    <Grid RowDefinitions="Auto,Auto,*,Auto"> 
+            <HorizontalStackLayout Grid.Row="0" Padding="15">                
+                <Button StyleClass="FilledTonalButton" Text="Recargar Tabla" Command="{Binding RecargarTablaCommand}"/>
+            </HorizontalStackLayout>
 
-        <HorizontalStackLayout Grid.Row="0" Padding="15">
-            <Button StyleClass="FilledButton" Text="Agregar Donante" Command="{Binding AgregarDonanteCommand}"/>
-            <Button StyleClass="FilledTonalButton" Text="Recargar Tabla" Command="{Binding RecargarTablaCommand}"/>
-        </HorizontalStackLayout>
+            <VerticalStackLayout Grid.Row="1" >
 
-        <VerticalStackLayout Grid.Row="1" >
+                <Grid ColumnDefinitions="Auto,*">
 
-            <Grid ColumnDefinitions="Auto,*">
+                    <HorizontalStackLayout Grid.Column="0" Padding="15" Spacing="10">
+                        <material:DropdownField Title="Cobrador" ItemsSource="{Binding ListaCobradores, Mode=TwoWay}"
+                                                SelectedItem="{Binding CobradorSeleccionado, Mode=TwoWay}"
+                                                Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.CircleChevronDown}}"/>
+                        <material:DropdownField Title="Elige una zona"
+                                                ItemsSource="{Binding ListaZonas}"
+                                                SelectedItem="{Binding ZonaSeleccionada, Mode=TwoWay}"
+                                                Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.CircleChevronDown}}"
+                                                IsEnabled="{Binding IsEnableDropdownZona}"/>
+                        <material:TextField Title="Buscar" 
+                                            AllowClear="True"
+                                            Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.User}}"
+                                            Text="{Binding TextoBusqueda, Mode=TwoWay}"
+                                            TextChanged="OnTextChanged"
+                                            MinimumWidthRequest="200"/>
 
-                <HorizontalStackLayout Grid.Column="0" Padding="15" Spacing="10">
-                    <material:DropdownField Title="Cobrador" ItemsSource="{Binding ListaCobradores, Mode=TwoWay}"
-                                            SelectedItem="{Binding CobradorSeleccionado, Mode=TwoWay}"
-                                            Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.CircleChevronDown}}"/>
-                    <material:DropdownField Title="Elige una zona"
-                                            ItemsSource="{Binding ListaZonas}"
-                                            SelectedItem="{Binding ZonaSeleccionada, Mode=TwoWay}"
-                                            Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.CircleChevronDown}}"
-                                            IsEnabled="{Binding IsEnableDropdownZona}"/>
-                    <material:TextField Title="Buscar" 
-                                        AllowClear="True"
-                                        Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.User}}"
-                                        Text="{Binding TextoBusqueda, Mode=TwoWay}"
-                                        TextChanged="OnTextChanged"
-                                        MinimumWidthRequest="200"/>
+                    </HorizontalStackLayout>
 
-                </HorizontalStackLayout>
-
-                <HorizontalStackLayout Grid.Column="1" Spacing="15">
-                    <Button StyleClass="OutlinedButton" Text="Ver Detalles" Command="{Binding ModificarDonanteCommand}" TextColor="#32b33b" />
-                    <Button StyleClass="OutlinedButton" Text="Eliminar" TextColor="{StaticResource Error}" Command="{Binding EliminarDonanteCommand}"/>
-                </HorizontalStackLayout>
-            </Grid>
-        </VerticalStackLayout>
+                    <HorizontalStackLayout Grid.Column="1" Spacing="15">
+                        <Button StyleClass="OutlinedButton" Text="Eliminar" TextColor="{StaticResource Error}" Command="{Binding EliminarDonanteCommand}"/>
+                    </HorizontalStackLayout>
+                </Grid>
+            </VerticalStackLayout>
 
 
-        <Grid ColumnDefinitions="0.02*,*,0.02*" Grid.Row="2">
+            <Grid ColumnDefinitions="0.02*,*,0.02*" Grid.Row="2">
         
-        <Border Stroke="Silver" StrokeThickness="5" Grid.Column="1">
-            <dg:DataGrid  ItemsSource="{Binding ListaDonantes}" Style="{StaticResource TablaComun}"             
-                             IsRefreshing="{Binding IsBusy}" PaginationEnabled="True" PageSize="15" PageNumber="1"
-                             SelectionMode="Single" SelectedItem="{Binding DonanteSeleccionado}"
-                              BorderColor="Black">
-                <dg:DataGrid.Columns>
-                    <dg:DataGridColumn Title="Codigo"  PropertyName="Id"/>
-                    <dg:DataGridColumn Title="DNI" PropertyName="Dni"/>
-                    <dg:DataGridColumn Title="Nombre y Apellido" PropertyName="NombreApellido"/>
-                    <dg:DataGridColumn Title="Ciudad" PropertyName="Ciudad"/>
-                    <dg:DataGridColumn Title="Monto" PropertyName="Monto"/>
-                    <dg:DataGridColumn Title="Cobrador">
-                        <dg:DataGridColumn.CellTemplate>
-                            <DataTemplate>
-                                <Label Text="{Binding IdCobradorNavigation.CodigoNombre}" 
-                                           HorizontalOptions="Center" VerticalOptions="Center"/>
-                            </DataTemplate>
-                        </dg:DataGridColumn.CellTemplate>
-                    </dg:DataGridColumn>
-                </dg:DataGrid.Columns>
-            </dg:DataGrid>
-        </Border>
+            <Border Stroke="Silver" StrokeThickness="5" Grid.Column="1">
+                <dg:DataGrid  ItemsSource="{Binding ListaDonantes}" Style="{StaticResource TablaComun}"             
+                                 IsRefreshing="{Binding IsBusy}" PaginationEnabled="True" PageSize="15" PageNumber="1"
+                                 SelectionMode="Single" SelectedItem="{Binding DonanteModificarAgregar}"
+                                  BorderColor="Black">
+                    <dg:DataGrid.Columns>
+                        <dg:DataGridColumn Title="Codigo"  PropertyName="Id"/>
+                        <dg:DataGridColumn Title="DNI" PropertyName="Dni"/>
+                        <dg:DataGridColumn Title="Nombre y Apellido" PropertyName="NombreApellido"/>
+                        <dg:DataGridColumn Title="Domicilio" PropertyName="Domicilio"/>
+                        <dg:DataGridColumn Title="Ciudad" PropertyName="Ciudad"/>
+                        <dg:DataGridColumn Title="Monto" PropertyName="Monto"/>
+                        <dg:DataGridColumn Title="Cobrador">
+                            <dg:DataGridColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Label Text="{Binding IdCobradorNavigation.CodigoNombre}" 
+                                               HorizontalOptions="Center" VerticalOptions="Center"/>
+                                </DataTemplate>
+                            </dg:DataGridColumn.CellTemplate>
+                        </dg:DataGridColumn>
+                    </dg:DataGrid.Columns>
+                </dg:DataGrid>
+            </Border>
+
+            </Grid>
+
+            
+            <Border Stroke="Silver" StrokeThickness="3" Padding="10"  Grid.Row="3" WidthRequest="800" Margin="0,40,0,0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10"/>
+                </Border.StrokeShape>
+
+                <Grid RowDefinitions="Auto, Auto, Auto,Auto,Auto, Auto" ColumnDefinitions="*,*" RowSpacing="20" ColumnSpacing="20">
+
+                    <material:TextField Grid.Row="0" Grid.Column="0" Title="DNI" Text="{Binding DonanteModificarAgregar.Dni}" />
+                    <material:TextField Grid.Row="0" Grid.Column="1" Title="Nombre y Apellido" Text="{Binding DonanteModificarAgregar.NombreApellido}">
+                        <validations:NombreApellidoValidation />
+                    </material:TextField>
+                    <material:TextField Grid.Row="1" Grid.Column="0" Title="Domicilio" Text="{Binding DonanteModificarAgregar.Domicilio}" />
+                    <material:TextField Grid.Row="1" Grid.Column="1" Title="Ciudad" Text="{Binding DonanteModificarAgregar.Ciudad}" />
+                    <material:TextField Grid.Row="2" Grid.Column="0" Title="Provincia" Text="{Binding DonanteModificarAgregar.Provincia}" />
+                    <material:TextField Grid.Row="2" Grid.Column="1" Title="País" Text="{Binding DonanteModificarAgregar.Pais}" />
+
+                    <material:DatePickerField Grid.Row="3" Grid.Column="0" Title="Fecha de Ingreso" Date="{Binding DonanteModificarAgregar.FechaIngreso}" 
+                                  Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Calendar}}"/>
+
+                    <material:TextField Grid.Row="3" Grid.Column="1" Title="Monto" Text="{Binding DonanteModificarAgregar.Monto}" Keyboard="Numeric">
+                        <validations:MontoValidation/>
+                    </material:TextField>
+
+                    <material:DropdownField Grid.Row="4" Grid.Column="0" Title="Cobrador" ItemsSource="{Binding ListaCobradores}" 
+                                SelectedItem="{Binding DonanteModificarAgregar.IdCobradorNavigation, Mode=TwoWay}">
+                    </material:DropdownField>
+
+                    <HorizontalStackLayout Grid.Row="5" Grid.ColumnSpan="2" Spacing="10" HorizontalOptions="End">
+                        <Button StyleClass="FilledButton" Text="Crear Donante" Command="{Binding AgregarDonanteCommand}"/>
+                        <Button StyleClass="OutlinedButton" Text="Guardar" TextColor="{StaticResource GreenSub}" Command="{Binding ModficiarDonadorCommand}" />
+                        <Button StyleClass="OutlinedButton" Text="Limpiar Campos" TextColor="{StaticResource Error}" Command="{Binding LimpiarCommand}"/>
+                    </HorizontalStackLayout>
+                </Grid>
+            </Border>
+
+            <Grid Grid.Row="4" HeightRequest="30"/>
 
         </Grid>
-
-        <Grid Grid.Row="3" HeightRequest="50"/>
-
-    </Grid>
+    </ScrollView>
 </uranium:UraniumContentPage>
